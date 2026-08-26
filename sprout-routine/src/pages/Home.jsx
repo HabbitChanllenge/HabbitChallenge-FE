@@ -1,19 +1,23 @@
-import logo from '../assets/logo.svg'
-import BottomNav from '../components/BottomNav.jsx'
+import logo from "../assets/logo.svg";
+import BottomNav from "../components/BottomNav.jsx";
+import HabitCard from "../components/HabitCard.jsx";
 
-export default function Home({ onNavigate, habit }) {
-  return (
-    <div className="home-page">
-      <header className="home-header"><button type="button" aria-label="알림">♧</button><img src={logo} alt="새싹루틴" /><div><b>31일</b><small>연속기록</small></div></header>
-      <section className="habit-section">
-        <div className="section-heading"><span>습관</span><button type="button">전체보기</button></div>
-        {habit ? <div className="habit-list"><article className="habit-card"><div><h2>{habit.name}</h2><p>{habit.frequency} · {habit.category}</p></div><div className="progress"><i style={{ width: habit.completed ? '100%' : '0%' }} /></div><div className="habit-actions"><button type="button" onClick={() => onNavigate('habit')}>{habit.completed ? '인증 완료' : '인증하기'}</button><button type="button" onClick={() => onNavigate('habit')}>습관 보기</button></div></article></div> : <div className="empty-state"><span>🌱</span><p>아직 만든 습관이 없어요.</p><button type="button" onClick={() => onNavigate('habit-create')}>첫 습관 만들기</button></div>}
-      </section>
-      <section className="ranking-section">
-        <div className="section-heading"><span>랭킹</span><button type="button">전체보기</button></div>
-        <div className="empty-state ranking-empty"><span>🏆</span><p>아직 랭킹에 참여한 사용자가 없어요.</p><small>습관을 만들고 첫 기록을 남겨보세요.</small></div>
-      </section>
-      <BottomNav active="home" onNavigate={onNavigate} />
-    </div>
-  )
+const rankings = [{ id: "seoyun_1444", days: 365 }, { id: "seoyun_2444", days: 277 }, { id: "seoyun_3444", days: 244 }];
+
+export default function Home({ onNavigate, habits, onToggleCheck, onEdit }) {
+  const streak = Math.max(0, ...habits.map((habit) => habit.streak ?? 0));
+  return <div className="home-page">
+    <header className="home-header"><span /><img src={logo} alt="새싹루틴" /><div className="streak-badge"><b>{streak}일</b><small>연속 인증</small></div></header>
+    <section className="habit-section"><div className="section-heading"><span>습관</span><button type="button" onClick={() => onNavigate("habit")}>더보기</button></div>
+      {habits.length ? <div className="habit-list">{habits.slice(0, 3).map((habit) => <HabitCard key={habit.id} habit={habit} onToggleCheck={onToggleCheck} onEdit={onEdit} />)}</div> : <div className="empty-state home-empty-state"><p>아직 습관이 없습니다.</p><button type="button" onClick={() => onNavigate("habit-create")}>습관 생성</button></div>}
+    </section>
+    <section className="ranking-section"><div className="section-heading"><span>랭킹</span><button type="button" onClick={() => onNavigate("ranking")}>더보기</button></div>
+      <div className="home-ranking-podium">
+        <div className="home-podium-user second"><b>{rankings[1].id}</b><span>{rankings[1].days}일</span></div>
+        <div className="home-podium-user first"><b>{rankings[0].id}</b><span>{rankings[0].days}일</span><em>🏆</em></div>
+        <div className="home-podium-user third"><b>{rankings[2].id}</b><span>{rankings[2].days}일</span></div>
+      </div>
+    </section>
+    <BottomNav active="home" onNavigate={onNavigate} />
+  </div>;
 }
