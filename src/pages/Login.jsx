@@ -5,7 +5,6 @@ const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export default function Login({ onSignup, onLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const emailError =
     submitted &&
@@ -41,23 +40,14 @@ export default function Login({ onSignup, onLogin }) {
         </label>
         <label className="field">
           <span>비밀번호</span>
-          <div className={`input-wrap ${passwordError ? "has-error" : ""}`}>
-            <input
-              type={showPassword ? "text" : "password"}
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              placeholder="비밀번호를 입력해 주세요."
-              autoComplete="current-password"
-            />
-            <button
-              className="visibility-button"
-              type="button"
-              aria-label={showPassword ? "비밀번호 숨기기" : "비밀번호 표시"}
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? "◌" : "◉"}
-            </button>
-          </div>
+          <input
+            className={passwordError ? "has-error" : ""}
+            type="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            placeholder="비밀번호를 입력해 주세요."
+            autoComplete="current-password"
+          />
           {passwordError && (
             <small className="error-message">{passwordError}</small>
           )}

@@ -834,7 +834,7 @@ input:focus {
 }
 .mypage-page .profile-hero {
   gap: 42px;
-  margin: 0 0 58px;
+  margin: 0 0 28px;
 }
 .mypage-page .profile-avatar {
   width: 125px;
@@ -915,7 +915,7 @@ input:focus {
   background: #95cd1a;
 }
 .mypage-page .profile-actions {
-  margin-top: auto;
+  margin-top: 22px;
 }
 .mypage-page .profile-actions .primary-button {
   padding: 16px;
@@ -924,7 +924,8 @@ input:focus {
   font-size: 14px;
 }
 .mypage-page .save-message {
-  margin: 22px 0 -8px;
+  margin: 14px 0 0;
+  min-height: 17px;
   font-size: 14px;
 }
 .confirm-modal .error-message {
@@ -1135,7 +1136,7 @@ input:focus {
 }
 .mypage-page .profile-content.is-editing .profile-hero {
   justify-content: center;
-  margin-bottom: 38px;
+  margin-bottom: 24px;
 }
 .mypage-page .profile-content.is-editing .profile-identity {
   display: none;
