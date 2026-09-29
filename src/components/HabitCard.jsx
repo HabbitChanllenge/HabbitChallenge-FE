@@ -2,9 +2,10 @@ import { useState } from "react";
 
 export default function HabitCard({ habit, onEdit, onToggleCheck }) {
   const [showChecks, setShowChecks] = useState(false);
-  const target = habit.frequency === "일주일"
-    ? Math.max(1, habit.verificationDays?.length ?? 0)
-    : Math.max(1, habit.verificationCount ?? 1);
+  const target =
+    habit.frequency === "일주일"
+      ? Math.max(1, habit.verificationDays?.length ?? 0)
+      : Math.max(1, habit.verificationCount ?? 1);
   const checks = habit.checks ?? [];
   const completedCount = checks.length;
   const isComplete = completedCount >= target;
@@ -13,9 +14,10 @@ export default function HabitCard({ habit, onEdit, onToggleCheck }) {
     : completedCount > 0
       ? "is-in-progress"
       : "is-pending";
-  const frequencyDetail = habit.frequency === "일주일"
-    ? `매주 ${completedCount}/${target}`
-    : `매일 ${completedCount}/${target}`;
+  const frequencyDetail =
+    habit.frequency === "일주일"
+      ? `매주 ${completedCount}/${target}`
+      : `매일 ${completedCount}/${target}`;
 
   return (
     <article className={`habit-card ${statusClass}`}>
@@ -23,12 +25,18 @@ export default function HabitCard({ habit, onEdit, onToggleCheck }) {
       <p>#{habit.category}</p>
       <p>{frequencyDetail}</p>
       <div className="habit-actions">
-        <button type="button" onClick={() => setShowChecks((value) => !value)}>인증</button>
-        <button type="button" onClick={() => onEdit(habit.id)}>수정</button>
+        <button type="button" onClick={() => setShowChecks((value) => !value)}>
+          인증
+        </button>
+        <button type="button" onClick={() => onEdit(habit.id)}>
+          수정
+        </button>
         <button type="button">연속 성공 {habit.streak ?? 0}일</button>
       </div>
       {showChecks && (
-        <div className={`verification-panel ${isComplete ? "is-complete" : ""}`}>
+        <div
+          className={`verification-panel ${isComplete ? "is-complete" : ""}`}
+        >
           <span>{isComplete ? "오늘 인증 완료" : "오늘 인증이 남았어요"}</span>
           <div className="verification-checks">
             {Array.from({ length: target }, (_, index) => (

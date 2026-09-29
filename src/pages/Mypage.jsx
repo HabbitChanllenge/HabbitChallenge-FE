@@ -6,30 +6,7 @@ import BottomNav from "../components/BottomNav.jsx";
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const namePattern = /^[a-zA-Z0-9_]{3,12}$/;
 
-function PasswordInput({ value, onChange, disabled, error }) {
-  const [visible, setVisible] = useState(false);
-  return (
-    <div className={`profile-password-wrap ${error ? "has-error" : ""}`}>
-      <input
-        type={visible ? "text" : "password"}
-        value={value}
-        onChange={onChange}
-        disabled={disabled}
-        autoComplete="current-password"
-      />
-      <button
-        type="button"
-        className="visibility-button"
-        onClick={() => setVisible((current) => !current)}
-        aria-label={visible ? "비밀번호 숨기기" : "비밀번호 보기"}
-      >
-        {visible ? "◌" : "◉"}
-      </button>
-    </div>
-  );
-}
-
-export default function Mypage({ onNavigate }) {
+export default function Mypage({ onNavigate, streak = 0, currentPassword = "habit1000" }) {
   const [editing, setEditing] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -38,7 +15,6 @@ export default function Mypage({ onNavigate }) {
   const [deleteAttempted, setDeleteAttempted] = useState(false);
   const [form, setForm] = useState({
     email: "habit10@sprout.com",
-    password: "habit1000",
     name: "habit10",
   });
   const change = (key) => (event) =>
@@ -48,10 +24,6 @@ export default function Mypage({ onNavigate }) {
       saveAttempted && !emailPattern.test(form.email)
         ? "올바른 이메일 형식을 입력해주세요."
         : "",
-    password:
-      saveAttempted && form.password.length < 8
-        ? "비밀번호는 8자 이상 입력해주세요."
-        : "",
     name:
       saveAttempted && !namePattern.test(form.name)
         ? "아이디는 영문, 숫자, 밑줄 3~12자로 입력해주세요."
@@ -60,14 +32,13 @@ export default function Mypage({ onNavigate }) {
   const deleteError =
     deleteAttempted && deletePassword.length < 8
       ? "비밀번호는 8자 이상 입력해주세요."
-      : deleteAttempted && deletePassword !== form.password
+      : deleteAttempted && deletePassword !== currentPassword
         ? "비밀번호가 일치하지 않습니다."
         : "";
   const save = () => {
     setSaveAttempted(true);
     if (
       !emailPattern.test(form.email) ||
-      form.password.length < 8 ||
       !namePattern.test(form.name)
     )
       return;
@@ -81,7 +52,7 @@ export default function Mypage({ onNavigate }) {
   };
   const deleteAccount = () => {
     setDeleteAttempted(true);
-    if (deletePassword.length < 8 || deletePassword !== form.password) return;
+    if (deletePassword.length < 8 || deletePassword !== currentPassword) return;
     onNavigate("splash");
   };
   useEffect(() => {
@@ -95,9 +66,12 @@ export default function Mypage({ onNavigate }) {
       <header className="home-header">
         <span />
         <img src={logo} alt="새싹루틴" />
-        <span />
+        <div className="streak-badge">
+          <b>{streak}일</b>
+          <small>연속 인증</small>
+        </div>
       </header>
-      <main className={`profile-content ${editing ? "is-editing" : ""}`}>
+      <main className={`profile-content ${editing ? "is-editing" : ""} ${saved ? "is-saved" : ""}`}>
         <div className="profile-hero">
           <img
             className="profile-avatar"
@@ -126,18 +100,6 @@ export default function Mypage({ onNavigate }) {
             )}
           </label>
           <label>
-            비밀번호
-            <PasswordInput
-              value={form.password}
-              onChange={change("password")}
-              disabled={!editing}
-              error={errors.password}
-            />
-            {errors.password && (
-              <small className="error-message">{errors.password}</small>
-            )}
-          </label>
-          <label>
             아이디
             <input
               className={errors.name ? "has-error" : ""}
@@ -150,6 +112,12 @@ export default function Mypage({ onNavigate }) {
             )}
           </label>
         </section>
+        {editing && <button type="button" className="profile-password-link" onClick={() => onNavigate("password-change")}>
+          비밀번호 수정
+        </button>}
+        {saveAttempted && (errors.email || errors.name) && (
+          <p className="profile-save-error">형식에 맞게 입력해주세요.</p>
+        )}
         {saved && <p className="save-message">수정이 완료되었습니다.</p>}
         <div className="profile-actions">
           {editing ? (
@@ -160,13 +128,6 @@ export default function Mypage({ onNavigate }) {
                 onClick={save}
               >
                 수정 완료하기
-              </button>
-              <button
-                type="button"
-                className="delete-account"
-                onClick={() => setConfirmDelete(true)}
-              >
-                회원 탈퇴
               </button>
             </>
           ) : (
@@ -179,6 +140,13 @@ export default function Mypage({ onNavigate }) {
             </button>
           )}
         </div>
+        {editing && <button
+          type="button"
+          className="delete-account profile-delete-account"
+          onClick={() => setConfirmDelete(true)}
+        >
+          회원 탈퇴
+        </button>}
       </main>
       <BottomNav active="mypage" onNavigate={onNavigate} />
       {confirmDelete && (

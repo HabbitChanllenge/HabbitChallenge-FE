@@ -2,19 +2,18 @@ import { useState } from "react";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export default function Login({ onSignup, onLogin }) {
+export default function Login({ onSignup, onLogin, onForgotPassword }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const emailError =
-    submitted &&
-    (!email
-      ? "이메일을 입력해주세요."
-      : !emailPattern.test(email)
-        ? "올바른 이메일 형식을 입력해주세요."
-        : "");
+    submitted && !emailPattern.test(email)
+      ? !email
+        ? "이메일을 입력해 주세요."
+        : "올바른 이메일 형식을 입력해 주세요."
+      : "";
   const passwordError =
-    submitted && password.length < 8 ? "비밀번호를 다시 확인해주세요." : "";
+    submitted && password.length < 8 ? "비밀번호를 다시 확인해 주세요." : "";
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -33,7 +32,7 @@ export default function Login({ onSignup, onLogin }) {
             type="email"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
-            placeholder="이메일을 입력해주세요."
+            placeholder="이메일을 입력해 주세요."
             autoComplete="email"
           />
           {emailError && <small className="error-message">{emailError}</small>}
@@ -51,11 +50,20 @@ export default function Login({ onSignup, onLogin }) {
           {passwordError && (
             <small className="error-message">{passwordError}</small>
           )}
+          <span className="forgot-password-row">
+            <button
+              type="button"
+              className="text-button"
+              onClick={onForgotPassword}
+            >
+              비밀번호 찾기
+            </button>
+          </span>
         </label>
       </div>
       <div className="form-bottom">
         <p>
-          아직 계정이 없으신가요?{" "}
+          아직 계정이 없으시다면?{" "}
           <button type="button" className="text-button" onClick={onSignup}>
             회원가입
           </button>

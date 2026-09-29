@@ -6,7 +6,7 @@ const categories = ["생활", "운동", "공부", "식습관", "마음건강", "
 const days = ["월", "화", "수", "목", "금", "토", "일"];
 const counts = Array.from({ length: 9 }, (_, index) => index + 1);
 
-export default function HabitForm({ mode, habit, onNavigate, onSave }) {
+export default function HabitForm({ mode, habit, onNavigate, onSave, onDelete }) {
   const [name, setName] = useState(habit?.name ?? "");
   const [frequency, setFrequency] = useState(habit?.frequency ?? "하루");
   const knownCategory = categories.includes(habit?.category) ? habit?.category : "기타";
@@ -15,8 +15,8 @@ export default function HabitForm({ mode, habit, onNavigate, onSave }) {
   const [verificationCount, setVerificationCount] = useState(habit?.frequency === "하루" && habit.verificationCount <= 9 ? String(habit.verificationCount) : "");
   const [customCount, setCustomCount] = useState(habit?.frequency === "하루" && habit.verificationCount > 9 ? String(habit.verificationCount) : "");
   const [selectedDays, setSelectedDays] = useState(habit?.verificationDays ?? []);
-  const [alertOn, setAlertOn] = useState(habit?.alertOn ?? false);
   const [submitted, setSubmitted] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const hasValidCount = verificationCount || (/^\d+$/.test(customCount) && Number(customCount) >= 10);
   const isValid =
     name.trim() &&
@@ -44,7 +44,6 @@ export default function HabitForm({ mode, habit, onNavigate, onSave }) {
       category: category === "기타" ? customCategory.trim() : category,
       verificationCount: frequency === "하루" ? Number(verificationCount || customCount) : selectedDays.length,
       verificationDays: frequency === "일주일" ? selectedDays : [],
-      alertOn,
       completed: habit?.completed ?? false,
     });
   };
@@ -99,18 +98,16 @@ export default function HabitForm({ mode, habit, onNavigate, onSave }) {
             {submitted && !selectedDays.length && <small>인증 요일을 선택해주세요.</small>}
           </fieldset>
         )}
-        <fieldset>
-          <legend>알림 받기</legend>
-          <div className="habit-choice-grid full-choice-grid alert-choice-grid">
-            <button type="button" className={!alertOn ? "selected" : ""} onClick={() => setAlertOn(false)}>끄기</button>
-            <button type="button" className={alertOn ? "selected" : ""} onClick={() => setAlertOn(true)}>켜기</button>
-          </div>
-        </fieldset>
         <button className={`primary-button habit-submit ${isValid ? "is-ready" : ""}`} type="submit">
           {mode === "edit" ? "수정하기" : "생성하기"}
         </button>
+        {mode === "edit" && <button className="delete-habit-button" type="button" onClick={() => setConfirmDelete(true)}>습관 삭제하기</button>}
       </form>
       <BottomNav active="habit" onNavigate={onNavigate} />
+      {confirmDelete && <div className="modal-backdrop"><section className="confirm-modal">
+        <h2>습관을 삭제하시겠습니까?</h2><p>삭제한 습관은 복구할 수 없습니다.</p>
+        <div><button type="button" onClick={() => setConfirmDelete(false)}>취소</button><button type="button" className="danger" onClick={onDelete}>삭제</button></div>
+      </section></div>}
     </div>
   );
 }

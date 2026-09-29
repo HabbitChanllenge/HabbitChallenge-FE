@@ -8,6 +8,8 @@ import HabitForm from "./pages/HabitForm.jsx";
 import Splash from "./pages/Splash.jsx";
 import Login from "./pages/Login.jsx";
 import SignupPage from "./pages/Signup.jsx";
+import PasswordRecovery from "./pages/PasswordRecovery.jsx";
+import PasswordChange from "./pages/PasswordChange.jsx";
 
 export default function App() {
   const [screen, setScreen] = useState("splash");
@@ -15,7 +17,10 @@ export default function App() {
   const [editingHabitId, setEditingHabitId] = useState(null);
   const [habitNotice, setHabitNotice] = useState("");
   const [authNotice, setAuthNotice] = useState("");
+  const [recoveryReturn, setRecoveryReturn] = useState("login");
+  const [currentPassword, setCurrentPassword] = useState("habit1000");
   const isSignup = screen === "signup";
+  const isRecovery = screen === "password-recovery";
   const isHome = [
     "home",
     "habit",
@@ -87,6 +92,15 @@ export default function App() {
     setHabitNotice(`${value.name} 습관이 수정되었습니다.`);
     setScreen("habit");
   };
+  const deleteHabit = () => {
+    setHabits((current) => current.filter((habit) => habit.id !== editingHabitId));
+    setEditingHabitId(null);
+    setScreen("habit");
+  };
+  const openRecovery = (returnTo = "login") => {
+    setRecoveryReturn(returnTo);
+    setScreen("password-recovery");
+  };
 
   const content =
     screen === "splash" ? (
@@ -108,7 +122,11 @@ export default function App() {
         onClearNotice={() => setHabitNotice("")}
       />
     ) : screen === "mypage" ? (
-      <Mypage onNavigate={setScreen} />
+      <Mypage
+        onNavigate={(next) => next === "password-recovery" ? openRecovery("mypage") : setScreen(next)}
+        streak={Math.max(0, ...habits.map((habit) => habit.streak ?? 0))}
+        currentPassword={currentPassword}
+      />
     ) : screen === "ranking" ? (
       <Ranking onNavigate={setScreen} />
     ) : screen === "habit-create" ? (
@@ -130,6 +148,7 @@ export default function App() {
         habit={editingHabit}
         onNavigate={setScreen}
         onSave={saveEdit}
+        onDelete={deleteHabit}
       />
     ) : isSignup ? (
       <SignupPage
@@ -139,9 +158,28 @@ export default function App() {
           setScreen("login");
         }}
       />
+    ) : isRecovery ? (
+      <PasswordRecovery
+        onBack={() => setScreen(recoveryReturn)}
+        onComplete={() => {
+          setAuthNotice("비밀번호가 변경되었습니다.");
+          setScreen(recoveryReturn);
+        }}
+      />
+    ) : screen === "password-change" ? (
+      <PasswordChange
+        currentPassword={currentPassword}
+        onComplete={(nextPassword) => {
+          setCurrentPassword(nextPassword);
+          setAuthNotice("비밀번호가 변경되었습니다.");
+          setScreen("mypage");
+        }}
+        onNavigate={setScreen}
+      />
     ) : (
       <Login
         onSignup={() => setScreen("signup")}
+        onForgotPassword={() => openRecovery("login")}
         onLogin={() => setScreen("home")}
       />
     );
@@ -149,7 +187,7 @@ export default function App() {
   return (
     <main className="app-shell">
       <section
-        className={`phone-frame ${isSignup ? "signup-mode" : ""} ${isHome ? "home-mode" : ""}`}
+        className={`phone-frame ${isSignup ? "signup-mode" : ""} ${isRecovery ? "recovery-mode" : ""} ${isHome ? "home-mode" : ""}`}
       >
         <div className="status-bar">
           <span>9:41</span>
