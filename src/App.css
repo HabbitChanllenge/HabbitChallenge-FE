@@ -1355,13 +1355,14 @@ input:focus {
   color: #83bd08;
 }
 .home-empty-state {
-  min-height: 92px;
-  height: 92px;
+  min-height: 96px;
+  height: 96px;
   box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: space-between;
+  display: grid;
+  grid-template-rows: auto 20px;
+  align-content: space-between;
+  justify-items: stretch;
+  gap: 12px;
   border: 0;
   border-radius: 12px;
   padding: 11px 13px;
@@ -1370,11 +1371,13 @@ input:focus {
   text-align: left;
 }
 .home-empty-state p {
+  margin: 0;
   font-size: 12px;
   font-weight: 600;
 }
 .home-empty-state button {
   width: 100%;
+  min-width: 0;
   height: 20px;
   flex: 0 0 20px;
   border-radius: 80px;
