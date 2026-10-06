@@ -234,11 +234,6 @@ export default function App() {
       <section
         className={`phone-frame ${isSignup ? "signup-mode" : ""} ${isRecovery ? "recovery-mode" : ""} ${isHome ? "home-mode" : ""}`}
       >
-        <div className="status-bar">
-          <span>9:41</span>
-          <span className="island" />
-          <span>▮▮▮ ◒</span>
-        </div>
         {content}
         {dataError && <p className="auth-notice" role="alert">{dataError}</p>}
         {authNotice && <p className="auth-notice">{authNotice}</p>}
