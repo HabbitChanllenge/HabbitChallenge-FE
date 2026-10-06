@@ -24,7 +24,7 @@ function normalizeHabits(result) {
         frequency: habit.frequency ?? (String(habit.periodType ?? "").toUpperCase().includes("WEEK") ? "일주일" : "하루"),
         category: habit.category ?? habit.categories?.[0] ?? "기타",
         checks: habit.checks ?? [],
-        verificationDays: habit.verificationDays ?? habit.days ?? (habit.dayOfWeek ?? []).map((day) => ["월", "화", "수", "목", "금", "토", "일"][Number(day) - 1]).filter(Boolean),
+        verificationDays: habit.verificationDays ?? habit.days ?? (habit.dayOfWeek ?? []).map((day) => { const names = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]; const labels = ["\uC6D4", "\uD654", "\uC218", "\uBAA9", "\uAE08", "\uD1A0", "\uC77C"]; const value = String(day).toLowerCase(); const index = Number.isInteger(day) ? day - 1 : names.indexOf(value); return labels[index] ?? day; }).filter(Boolean),
         verificationCount: Number(
           habit.verificationCount ?? habit.totalRepeat ?? habit.targetCount ?? 1,
         ),

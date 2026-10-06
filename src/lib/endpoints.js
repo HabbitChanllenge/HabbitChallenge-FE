@@ -2,10 +2,15 @@ import { apiRequest } from "./api.js";
 
 const withId = (path, id) => path.replace(":id", encodeURIComponent(id));
 
-const dayNumber = (day) => {
-  if (Number.isInteger(day)) return day;
-  const index = ["월", "화", "수", "목", "금", "토", "일"].indexOf(day);
-  return index < 0 ? Number(day) : index + 1;
+const weekDays = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+const koreanWeekDays = ["\uC6D4", "\uD654", "\uC218", "\uBAA9", "\uAE08", "\uD1A0", "\uC77C"];
+
+const dayName = (day) => {
+  if (Number.isInteger(day)) return weekDays[day - 1] ?? String(day);
+  const value = String(day).trim();
+  const koreanIndex = koreanWeekDays.indexOf(value);
+  if (koreanIndex >= 0) return weekDays[koreanIndex];
+  return value.toLowerCase();
 };
 
 function habitCategories(value) {
@@ -16,7 +21,7 @@ function habitCategories(value) {
 export function toDailyHabitCreateRequest(value) {
   return {
     name: value.name,
-    periodType: value.periodType ?? "DAILY",
+    periodType: "day",
     categories: habitCategories(value),
     totalRepeat: Number(value.totalRepeat ?? value.verificationCount ?? 1),
   };
@@ -25,9 +30,9 @@ export function toDailyHabitCreateRequest(value) {
 export function toWeeklyHabitCreateRequest(value) {
   return {
     name: value.name,
-    periodType: value.periodType ?? "WEEKLY",
+    periodType: "week",
     categories: habitCategories(value),
-    dayOfWeek: (value.dayOfWeek ?? value.verificationDays ?? []).map(dayNumber),
+    dayOfWeek: (value.dayOfWeek ?? value.verificationDays ?? []).map(dayName),
   };
 }
 
