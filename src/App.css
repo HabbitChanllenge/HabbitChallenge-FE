@@ -716,6 +716,37 @@ input:focus {
   padding: 22px 18px;
   background: white;
 }
+.password-alert-backdrop {
+  z-index: 6;
+  padding: 18px;
+  background: rgba(0, 0, 0, 0.32);
+}
+.password-alert {
+  width: min(100%, 280px);
+  box-sizing: border-box;
+  border-radius: 20px;
+  padding: 22px 24px 20px;
+  background: #fff;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+.password-alert p {
+  margin: 0 0 16px;
+  color: #222;
+  font-size: 15px;
+  font-weight: 600;
+}
+.password-alert button {
+  width: 100%;
+  min-height: 50px;
+  border: 0;
+  border-radius: 28px;
+  background: #e8e8e8;
+  color: #222;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
 .confirm-modal h2 {
   margin: 0 0 8px;
   font-size: 15px;
@@ -1335,8 +1366,12 @@ input:focus {
   font-size: 14px;
 }
 .mypage-page .profile-content {
+  min-height: 0;
   padding-top: 30px;
+  overflow-y: auto;
+  scrollbar-width: none;
 }
+.mypage-page .profile-content::-webkit-scrollbar { display: none; }
 .mypage-page .profile-content.is-saved .save-message {
   margin-top: auto;
 }

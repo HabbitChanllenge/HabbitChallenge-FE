@@ -15,6 +15,7 @@ export default function Mypage({
 }) {
   const [editing, setEditing] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [passwordAlert, setPasswordAlert] = useState(false);
   const [saved, setSaved] = useState(false);
   const [saveAttempted, setSaveAttempted] = useState(false);
   const [deletePassword, setDeletePassword] = useState("");
@@ -97,7 +98,13 @@ export default function Mypage({
     try {
       await onDeleteAccount(deletePassword);
     } catch (error) {
-      setRequestError(error.message || "회원 탈퇴에 실패했습니다.");
+      if (error.status === 401) {
+        setConfirmDelete(false);
+        setDeletePassword("");
+        setPasswordAlert(true);
+      } else {
+        setRequestError(error.message || "회원 탈퇴에 실패했습니다.");
+      }
     }
   };
   useEffect(() => {
@@ -227,6 +234,14 @@ export default function Mypage({
                 탈퇴
               </button>
             </div>
+          </section>
+        </div>
+      )}
+      {passwordAlert && (
+        <div className="modal-backdrop password-alert-backdrop">
+          <section className="password-alert" role="alertdialog" aria-modal="true" aria-labelledby="password-alert-message">
+            <p id="password-alert-message">비밀번호를 확인해 주세요.</p>
+            <button type="button" onClick={() => setPasswordAlert(false)}>확인</button>
           </section>
         </div>
       )}
