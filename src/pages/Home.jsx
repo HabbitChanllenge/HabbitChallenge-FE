@@ -37,9 +37,8 @@ export default function Home({ onNavigate, habits, onToggleCheck, onEdit, token,
       window.removeEventListener("offline", markOffline);
     };
   }, []);
-  const offlineFallback = !online || habitsUnavailable || Boolean(rankingError);
-  const showHabitsSkeleton = offlineFallback || habitsLoading;
-  const showRankingSkeleton = offlineFallback || rankingLoading || rankings.length === 0;
+  const showHabitsSkeleton = !online || habitsUnavailable || habitsLoading;
+  const showRankingSkeleton = !online || Boolean(rankingError) || rankingLoading || rankings.length === 0;
   const streak = Math.max(0, ...habits.map((habit) => habit.streak ?? 0));
   return (
     <div className="home-page">
