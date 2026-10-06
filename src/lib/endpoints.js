@@ -2,8 +2,24 @@ import { apiRequest } from "./api.js";
 
 const withId = (path, id) => path.replace(":id", encodeURIComponent(id));
 
-const weekDays = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
-const koreanWeekDays = ["\uC6D4", "\uD654", "\uC218", "\uBAA9", "\uAE08", "\uD1A0", "\uC77C"];
+const weekDays = [
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+  "sunday",
+];
+const koreanWeekDays = [
+  "\uC6D4",
+  "\uD654",
+  "\uC218",
+  "\uBAA9",
+  "\uAE08",
+  "\uD1A0",
+  "\uC77C",
+];
 
 const dayName = (day) => {
   if (Number.isInteger(day)) return weekDays[day - 1] ?? String(day);
@@ -72,10 +88,19 @@ export const habitApi = {
       token,
     }),
   update: (id, body, token) => {
-    const requestBody =
-      body.frequency === "일주일" || body.dayOfWeek
-        ? toWeeklyHabitCreateRequest(body)
-        : toDailyHabitCreateRequest(body);
+    const requestBody = {};
+    if (body.name !== undefined) requestBody.name = body.name;
+    if (body.category !== undefined || body.categories !== undefined) {
+      requestBody.category = Array.isArray(body.category)
+        ? body.category
+        : Array.isArray(body.categories)
+          ? body.categories
+          : [body.category];
+    }
+    const isWeekly = body.dayOfWeek !== undefined || (body.verificationDays?.length ?? 0) > 0 || /week/i.test(body.frequency ?? body.periodType ?? "");
+    if (!isWeekly && (body.totalRepeat !== undefined || body.verificationCount !== undefined)) {
+      requestBody.totalRepeat = Number(body.totalRepeat ?? body.verificationCount);
+    }
     return apiRequest(withId("/habits/update/:id", id), {
       method: "PATCH",
       body: requestBody,
@@ -84,8 +109,8 @@ export const habitApi = {
   },
   remove: (id, token) =>
     apiRequest(withId("/habits/:id", id), { method: "DELETE", token }),
-  verify: (id, body, token) =>
-    apiRequest(withId("/habit/:id", id), { method: "PATCH", body, token }),
+  verify: (id, completedCount, token) =>
+    apiRequest(withId("/habit/:id", id), { method: "PATCH", body: { completedCount }, token }),
 };
 
 export const streakApi = {

@@ -781,8 +781,10 @@ input:focus {
 .habit-page-content {
   display: flex;
   flex: 1;
+  min-height: 0;
   flex-direction: column;
   padding: 20px 4px;
+  overflow: hidden;
 }
 .habit-title {
   display: flex;
@@ -1500,7 +1502,10 @@ input:focus {
 @keyframes toast-in { from { opacity: 0; transform: translate(-50%, 8px); } to { opacity: 1; transform: translate(-50%, 0); } }
 
 .habit-list-scroll {
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
+  align-content: start;
   padding-right: 2px;
 }
 

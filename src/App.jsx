@@ -16,21 +16,48 @@ function normalizeHabits(result) {
   const rows = Array.isArray(result)
     ? result
     : (result?.habits ?? result?.data?.habits ?? result?.data ?? []);
-  return Array.isArray(rows)
-    ? rows.map((habit, index) => ({
-        ...habit,
-        id: habit.id ?? habit.habitId ?? index,
-        name: habit.name ?? habit.title ?? "습관",
-        frequency: habit.frequency ?? (String(habit.periodType ?? "").toUpperCase().includes("WEEK") ? "일주일" : "하루"),
-        category: habit.category ?? habit.categories?.[0] ?? "기타",
-        checks: habit.checks ?? [],
-        verificationDays: habit.verificationDays ?? habit.days ?? (habit.dayOfWeek ?? []).map((day) => { const names = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]; const labels = ["\uC6D4", "\uD654", "\uC218", "\uBAA9", "\uAE08", "\uD1A0", "\uC77C"]; const value = String(day).toLowerCase(); const index = Number.isInteger(day) ? day - 1 : names.indexOf(value); return labels[index] ?? day; }).filter(Boolean),
-        verificationCount: Number(
-          habit.verificationCount ?? habit.totalRepeat ?? habit.targetCount ?? 1,
-        ),
-        streak: Number(habit.streak ?? habit.streakDays ?? 0),
-      }))
-    : [];
+  if (!Array.isArray(rows)) return [];
+
+  return rows.map((habit, index) => {
+    const isWeekly = String(habit.periodType ?? "").toLowerCase().includes("week");
+    const rawDays = habit.dayOfWeek ?? habit.verificationDays ?? habit.days ?? [];
+    const dayNames = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+    const dayLabels = ["\uC6D4", "\uD654", "\uC218", "\uBAA9", "\uAE08", "\uD1A0", "\uC77C"];
+    const verificationDays = rawDays.map((day) => {
+      const value = String(day).toLowerCase();
+      const dayIndex = Number.isInteger(day) ? day - 1 : dayNames.indexOf(value);
+      return dayLabels[dayIndex] ?? day;
+    });
+    const targetCount = isWeekly
+      ? verificationDays.length
+      : Number(habit.totalRepeat ?? habit.verificationCount ?? 1);
+    const completedCount = Number(
+      habit.completedCount ?? (habit.completed ? targetCount : habit.checks?.length ?? 0),
+    );
+    const checks = Array.isArray(habit.checks)
+      ? habit.checks
+      : Array.from({ length: completedCount }, (_, checkIndex) => checkIndex);
+    const categories = Array.isArray(habit.category)
+      ? habit.category
+      : Array.isArray(habit.categories)
+        ? habit.categories
+        : habit.category
+          ? [habit.category]
+          : [];
+
+    return {
+      ...habit,
+      id: habit.id ?? habit.habitId ?? index,
+      name: habit.name ?? habit.title ?? "",
+      frequency: habit.frequency ?? (isWeekly ? "\uC8FC\uAC04" : "\uD558\uB8E8"),
+      category: categories[0] ?? "",
+      checks,
+      verificationDays,
+      verificationCount: targetCount,
+      completedCount,
+      streak: Number(habit.streak ?? habit.streakDays ?? 0),
+    };
+  });
 }
 
 export default function App() {
@@ -109,13 +136,12 @@ export default function App() {
 
   const toggleHabitCheck = async (habitId, index) => {
     const habit = habits.find((item) => item.id === habitId);
-    const existing = habit?.checks ?? [];
+    const completedCount = habit?.completedCount ?? habit?.checks?.length ?? 0;
+    const nextCompletedCount = habit?.checks?.includes(index)
+      ? Math.max(0, index)
+      : Math.max(completedCount, index + 1);
     try {
-      await habitApi.verify(
-        habitId,
-        { completed: !existing.includes(index), checkIndex: index },
-        token,
-      );
+      await habitApi.verify(habitId, nextCompletedCount, token);
       setHabits(normalizeHabits(await habitApi.list(token)));
       setDataError("");
     } catch (error) {
