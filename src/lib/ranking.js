@@ -24,6 +24,13 @@ export function useRanking(token) {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [networkRevision, setNetworkRevision] = useState(0);
+
+  useEffect(() => {
+    const retryWhenOnline = () => setNetworkRevision((revision) => revision + 1);
+    window.addEventListener("online", retryWhenOnline);
+    return () => window.removeEventListener("online", retryWhenOnline);
+  }, []);
 
   useEffect(() => {
     let active = true;
@@ -34,7 +41,7 @@ export function useRanking(token) {
       .catch((reason) => { if (active) setError(reason.message || "랭킹을 불러오지 못했습니다."); })
       .finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
-  }, [token]);
+  }, [token, networkRevision]);
 
   return { users, loading, error };
 }

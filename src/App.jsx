@@ -35,15 +35,32 @@ export default function App() {
   const [token, setToken] = useState(() => localStorage.getItem("sprout-token") || "");
   const [hasSession, setHasSession] = useState(() => Boolean(localStorage.getItem("sprout-token")));
   const [dataError, setDataError] = useState("");
+  const [habitsLoading, setHabitsLoading] = useState(false);
+  const [habitsUnavailable, setHabitsUnavailable] = useState(false);
+  const [networkRevision, setNetworkRevision] = useState(0);
 
   useEffect(() => {
-    if (!hasSession) return;
+    const retryWhenOnline = () => setNetworkRevision((revision) => revision + 1);
+    window.addEventListener("online", retryWhenOnline);
+    return () => window.removeEventListener("online", retryWhenOnline);
+  }, []);
+
+  useEffect(() => {
+    if (!hasSession) {
+      setHabitsLoading(false);
+      return;
+    }
     let active = true;
+    setHabitsLoading(true);
     habitApi.list(token).then((result) => {
-      if (active) setHabits(normalizeHabits(result));
-    }).catch((error) => { if (active) setDataError(error.message || "습관 정보를 불러오지 못했습니다."); });
+      if (active) {
+        setHabits(normalizeHabits(result));
+        setHabitsUnavailable(false);
+      }
+    }).catch(() => { if (active) setHabitsUnavailable(true); })
+      .finally(() => { if (active) setHabitsLoading(false); });
     return () => { active = false; };
-  }, [token, hasSession]);
+  }, [token, hasSession, networkRevision]);
   const isSignup = screen === "signup";
   const isRecovery = screen === "password-recovery";
   const isHome = [
@@ -116,6 +133,8 @@ export default function App() {
         onToggleCheck={toggleHabitCheck}
         onEdit={openEdit}
         token={token}
+        habitsLoading={habitsLoading}
+        habitsUnavailable={habitsUnavailable}
       />
     ) : screen === "habit" ? (
       <Habit
@@ -199,6 +218,9 @@ export default function App() {
         onLogin={(nextToken) => {
           setToken(nextToken || "");
           setHasSession(true);
+          setHabitsLoading(true);
+          setHabitsUnavailable(false);
+          setDataError("");
           if (nextToken) localStorage.setItem("sprout-token", nextToken);
           setScreen("home");
         }}
