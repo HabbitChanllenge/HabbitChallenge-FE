@@ -1,4 +1,5 @@
 const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL ?? "").replace(/\/+$/, "");
+export const getApiBaseUrl = () => apiBaseUrl;
 
 export class ApiError extends Error {
   constructor(message, { status, data } = {}) {
@@ -15,9 +16,11 @@ export async function apiRequest(path, options = {}) {
     throw new Error("API 주소가 설정되지 않았습니다. 프로젝트 루트의 .env.local에 VITE_API_BASE_URL을 입력해 주세요.");
   }
 
-  const { body, headers, ...requestOptions } = options;
+  const { body, headers, token, ...requestOptions } = options;
   const requestHeaders = new Headers(headers);
   let requestBody = body;
+
+  if (token) requestHeaders.set("Authorization", `Bearer ${token}`);
 
   if (body !== undefined && body !== null && !(body instanceof FormData)) {
     requestHeaders.set("Content-Type", "application/json");

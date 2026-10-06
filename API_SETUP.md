@@ -15,8 +15,17 @@ const result = await apiRequest("/api/example", {
 });
 ```
 
+Endpoint wrappers based on the exported API list are in `src/lib/endpoints.js`
+(`authApi`, `userApi`, `habitApi`, and `streakApi`). They provide the listed
+paths and methods; request bodies still need to match the backend's field names.
+
 The helper JSON-encodes request bodies, includes cookies by default, returns JSON
 or text responses, and throws `ApiError` when the server returns a non-success
 status. If the frontend and backend have different origins, configure the
-backend to allow the frontend origin through CORS. Connect each screen after
-the matching endpoint and its request/response format are known.
+backend to allow the frontend origin through CORS. Login, signup, habit loading
+and mutations, and the ranking screen now call these wrappers. The supplied
+export lists paths and HTTP methods, but not request/response schemas, token
+placement, or the API base prefix. Current form payloads and response mapping
+use common field names; confirm them against the backend contract if requests
+return validation errors or the ranking is empty. Week-habit creation and
+streak endpoints are marked unconfirmed in the export.

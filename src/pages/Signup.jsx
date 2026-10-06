@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { authApi } from "../lib/endpoints.js";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -37,6 +38,8 @@ export default function Signup({ onLogin, onComplete }) {
     confirm: "",
   });
   const [submitted, setSubmitted] = useState(false);
+  const [requestError, setRequestError] = useState("");
+  const [loading, setLoading] = useState(false);
   const update = (key) => (value) =>
     setForm((current) => ({ ...current, [key]: value }));
   const errors = {
@@ -57,11 +60,19 @@ export default function Signup({ onLogin, onComplete }) {
         ? "비밀번호가 일치하지 않습니다."
         : "",
   };
-  const submit = (event) => {
+  const submit = async (event) => {
     event.preventDefault();
     setSubmitted(true);
     const valid = /^[a-zA-Z0-9_]{3,12}$/.test(form.name) && emailPattern.test(form.email) && form.password.length >= 8 && form.password === form.confirm;
-    if (valid) onComplete();
+    if (!valid) return;
+    setLoading(true);
+    setRequestError("");
+    try {
+      await authApi.signup({ username: form.name, name: form.name, email: form.email, password: form.password });
+      onComplete();
+    } catch (error) {
+      setRequestError(error.message || "회원가입에 실패했습니다.");
+    } finally { setLoading(false); }
   };
 
   return (
@@ -111,6 +122,7 @@ export default function Signup({ onLogin, onComplete }) {
         />
       </div>
       <div className="form-bottom">
+        {requestError && <p className="error-message" role="alert">{requestError}</p>}
         <p>
           이미 계정이 있으신가요?{" "}
           <button type="button" className="text-button" onClick={onLogin}>
@@ -120,6 +132,7 @@ export default function Signup({ onLogin, onComplete }) {
         <button
           className={`primary-button signup-submit ${Object.values(form).some(Boolean) ? "is-filled" : ""}`}
           type="submit"
+          disabled={loading}
         >
           가입하고 시작하기
         </button>

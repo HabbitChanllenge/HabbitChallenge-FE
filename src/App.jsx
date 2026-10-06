@@ -10,6 +10,7 @@ import Login from "./pages/Login.jsx";
 import SignupPage from "./pages/Signup.jsx";
 import PasswordRecovery from "./pages/PasswordRecovery.jsx";
 import PasswordChange from "./pages/PasswordChange.jsx";
+import { habitApi } from "./lib/endpoints.js";
 
 export default function App() {
   const [screen, setScreen] = useState("splash");
@@ -19,6 +20,26 @@ export default function App() {
   const [authNotice, setAuthNotice] = useState("");
   const [recoveryReturn, setRecoveryReturn] = useState("login");
   const [currentPassword, setCurrentPassword] = useState("habit1000");
+  const [token, setToken] = useState(() => localStorage.getItem("sprout-token") || "");
+  const [dataError, setDataError] = useState("");
+
+  useEffect(() => {
+    if (!token) return;
+    let active = true;
+    habitApi.list(token).then((result) => {
+      const rows = Array.isArray(result) ? result : result?.habits ?? result?.data?.habits ?? result?.data ?? [];
+      if (active && Array.isArray(rows)) setHabits(rows.map((habit, index) => ({
+        ...habit,
+        id: habit.id ?? habit.habitId ?? index,
+        name: habit.name ?? habit.title ?? "습관",
+        checks: habit.checks ?? [],
+        verificationDays: habit.verificationDays ?? habit.days ?? [],
+        verificationCount: Number(habit.verificationCount ?? habit.targetCount ?? 1),
+        streak: Number(habit.streak ?? habit.streakDays ?? 0),
+      })));
+    }).catch((error) => { if (active) setDataError(error.message || "습관 정보를 불러오지 못했습니다."); });
+    return () => { active = false; };
+  }, [token]);
   const isSignup = screen === "signup";
   const isRecovery = screen === "password-recovery";
   const isHome = [
@@ -43,7 +64,14 @@ export default function App() {
     return () => window.clearTimeout(timer);
   }, [authNotice]);
 
-  const toggleHabitCheck = (habitId, index) => {
+  const toggleHabitCheck = async (habitId, index) => {
+    const habit = habits.find((item) => item.id === habitId);
+    const existing = habit?.checks ?? [];
+    const nextChecks = existing.includes(index) ? existing.filter((item) => item !== index) : [...existing, index];
+    try {
+      if (token) await habitApi.verify(habitId, { completed: !existing.includes(index), checkIndex: index }, token);
+      setDataError("");
+    } catch (error) { setDataError(error.message || "습관 인증을 저장하지 못했습니다."); return; }
     setHabits((current) =>
       current.map((habit) => {
         if (habit.id !== habitId) return habit;
@@ -72,7 +100,11 @@ export default function App() {
     setEditingHabitId(habitId);
     setScreen("habit-edit");
   };
-  const saveEdit = (value) => {
+  const saveEdit = async (value) => {
+    try {
+      if (token) await habitApi.update(editingHabitId, value, token);
+      setDataError("");
+    } catch (error) { setDataError(error.message || "습관을 수정하지 못했습니다."); return; }
     setHabits((current) =>
       current.map((habit) => {
         if (habit.id !== editingHabitId) return habit;
@@ -92,7 +124,11 @@ export default function App() {
     setHabitNotice(`${value.name} 습관이 수정되었습니다.`);
     setScreen("habit");
   };
-  const deleteHabit = () => {
+  const deleteHabit = async () => {
+    try {
+      if (token) await habitApi.remove(editingHabitId, token);
+      setDataError("");
+    } catch (error) { setDataError(error.message || "습관을 삭제하지 못했습니다."); return; }
     setHabits((current) => current.filter((habit) => habit.id !== editingHabitId));
     setEditingHabitId(null);
     setScreen("habit");
@@ -128,18 +164,23 @@ export default function App() {
         currentPassword={currentPassword}
       />
     ) : screen === "ranking" ? (
-      <Ranking onNavigate={setScreen} />
+      <Ranking onNavigate={setScreen} token={token} />
     ) : screen === "habit-create" ? (
       <HabitForm
         mode="create"
         onNavigate={setScreen}
-        onSave={(value) => {
+        onSave={async (value) => {
+          try {
+            const result = token ? await (value.frequency === "일주일" ? habitApi.createWeek(value, token) : habitApi.createDay(value, token)) : null;
+            setDataError("");
+            const created = result?.habit ?? result?.data?.habit ?? result?.data ?? result;
           setHabits((current) => [
             ...current,
-            { ...value, id: crypto.randomUUID(), checks: [], streak: 0 },
+            { ...value, ...(created && typeof created === "object" ? created : {}), id: created?.id ?? created?.habitId ?? crypto.randomUUID(), checks: [], streak: 0 },
           ]);
           setHabitNotice("습관이 생성되었습니다.");
           setScreen("habit");
+          } catch (error) { setDataError(error.message || "습관을 생성하지 못했습니다."); }
         }}
       />
     ) : screen === "habit-edit" ? (
@@ -180,7 +221,11 @@ export default function App() {
       <Login
         onSignup={() => setScreen("signup")}
         onForgotPassword={() => openRecovery("login")}
-        onLogin={() => setScreen("home")}
+        onLogin={(nextToken) => {
+          setToken(nextToken || "");
+          if (nextToken) localStorage.setItem("sprout-token", nextToken);
+          setScreen("home");
+        }}
       />
     );
 
@@ -195,6 +240,7 @@ export default function App() {
           <span>▮▮▮ ◒</span>
         </div>
         {content}
+        {dataError && <p className="auth-notice" role="alert">{dataError}</p>}
         {authNotice && <p className="auth-notice">{authNotice}</p>}
         <div className="home-indicator" />
       </section>
