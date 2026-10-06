@@ -22,10 +22,16 @@ paths and methods; request bodies still need to match the backend's field names.
 The helper JSON-encodes request bodies, includes cookies by default, returns JSON
 or text responses, and throws `ApiError` when the server returns a non-success
 status. If the frontend and backend have different origins, configure the
-backend to allow the frontend origin through CORS. Login, signup, habit loading
-and mutations, and the ranking screen now call these wrappers. The supplied
-export lists paths and HTTP methods, but not request/response schemas, token
-placement, or the API base prefix. Current form payloads and response mapping
-use common field names; confirm them against the backend contract if requests
-return validation errors or the ranking is empty. Week-habit creation and
-streak endpoints are marked unconfirmed in the export.
+backend to allow the frontend origin through CORS.
+
+Confirmed request shapes currently used by the frontend:
+
+- Signup: `{ userId, email, password }`.
+- Get profile: `GET /user/me`, response fields include `{ userId, name, email }`.
+- Update profile: `{ userId, email, currentPassword, newPassword }`.
+
+Login, habits, ranking, password recovery, and account resignation are wired to
+the supplied endpoint paths. Their request/response schemas and token placement
+were not included in the endpoint export, so those mappings may need adjustment
+against the backend implementation. Week-habit creation and streak endpoints
+are marked unconfirmed in the export.

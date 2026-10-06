@@ -10,7 +10,20 @@ import Login from "./pages/Login.jsx";
 import SignupPage from "./pages/Signup.jsx";
 import PasswordRecovery from "./pages/PasswordRecovery.jsx";
 import PasswordChange from "./pages/PasswordChange.jsx";
-import { habitApi } from "./lib/endpoints.js";
+import { authApi, habitApi } from "./lib/endpoints.js";
+
+function normalizeHabits(result) {
+  const rows = Array.isArray(result) ? result : result?.habits ?? result?.data?.habits ?? result?.data ?? [];
+  return Array.isArray(rows) ? rows.map((habit, index) => ({
+    ...habit,
+    id: habit.id ?? habit.habitId ?? index,
+    name: habit.name ?? habit.title ?? "습관",
+    checks: habit.checks ?? [],
+    verificationDays: habit.verificationDays ?? habit.days ?? [],
+    verificationCount: Number(habit.verificationCount ?? habit.targetCount ?? 1),
+    streak: Number(habit.streak ?? habit.streakDays ?? 0),
+  })) : [];
+}
 
 export default function App() {
   const [screen, setScreen] = useState("splash");
@@ -19,27 +32,18 @@ export default function App() {
   const [habitNotice, setHabitNotice] = useState("");
   const [authNotice, setAuthNotice] = useState("");
   const [recoveryReturn, setRecoveryReturn] = useState("login");
-  const [currentPassword, setCurrentPassword] = useState("habit1000");
   const [token, setToken] = useState(() => localStorage.getItem("sprout-token") || "");
+  const [hasSession, setHasSession] = useState(() => Boolean(localStorage.getItem("sprout-token")));
   const [dataError, setDataError] = useState("");
 
   useEffect(() => {
-    if (!token) return;
+    if (!hasSession) return;
     let active = true;
     habitApi.list(token).then((result) => {
-      const rows = Array.isArray(result) ? result : result?.habits ?? result?.data?.habits ?? result?.data ?? [];
-      if (active && Array.isArray(rows)) setHabits(rows.map((habit, index) => ({
-        ...habit,
-        id: habit.id ?? habit.habitId ?? index,
-        name: habit.name ?? habit.title ?? "습관",
-        checks: habit.checks ?? [],
-        verificationDays: habit.verificationDays ?? habit.days ?? [],
-        verificationCount: Number(habit.verificationCount ?? habit.targetCount ?? 1),
-        streak: Number(habit.streak ?? habit.streakDays ?? 0),
-      })));
+      if (active) setHabits(normalizeHabits(result));
     }).catch((error) => { if (active) setDataError(error.message || "습관 정보를 불러오지 못했습니다."); });
     return () => { active = false; };
-  }, [token]);
+  }, [token, hasSession]);
   const isSignup = screen === "signup";
   const isRecovery = screen === "password-recovery";
   const isHome = [
@@ -67,33 +71,11 @@ export default function App() {
   const toggleHabitCheck = async (habitId, index) => {
     const habit = habits.find((item) => item.id === habitId);
     const existing = habit?.checks ?? [];
-    const nextChecks = existing.includes(index) ? existing.filter((item) => item !== index) : [...existing, index];
     try {
-      if (token) await habitApi.verify(habitId, { completed: !existing.includes(index), checkIndex: index }, token);
+      await habitApi.verify(habitId, { completed: !existing.includes(index), checkIndex: index }, token);
+      setHabits(normalizeHabits(await habitApi.list(token)));
       setDataError("");
     } catch (error) { setDataError(error.message || "습관 인증을 저장하지 못했습니다."); return; }
-    setHabits((current) =>
-      current.map((habit) => {
-        if (habit.id !== habitId) return habit;
-        const checks = habit.checks ?? [];
-        const nextChecks = checks.includes(index)
-          ? checks.filter((item) => item !== index)
-          : [...checks, index];
-        const target =
-          habit.frequency === "일주일"
-            ? Math.max(1, habit.verificationDays?.length ?? 0)
-            : Math.max(1, habit.verificationCount ?? 1);
-        const completed = nextChecks.length >= target;
-        return {
-          ...habit,
-          checks: nextChecks,
-          completed,
-          streak: completed
-            ? Math.max(1, habit.streak ?? 0)
-            : (habit.streak ?? 0),
-        };
-      }),
-    );
   };
 
   const openEdit = (habitId) => {
@@ -102,31 +84,17 @@ export default function App() {
   };
   const saveEdit = async (value) => {
     try {
-      if (token) await habitApi.update(editingHabitId, value, token);
+      await habitApi.update(editingHabitId, value, token);
+      setHabits(normalizeHabits(await habitApi.list(token)));
       setDataError("");
     } catch (error) { setDataError(error.message || "습관을 수정하지 못했습니다."); return; }
-    setHabits((current) =>
-      current.map((habit) => {
-        if (habit.id !== editingHabitId) return habit;
-        const target =
-          value.frequency === "일주일"
-            ? value.verificationDays.length
-            : value.verificationCount;
-        const checks = (habit.checks ?? []).filter((check) => check < target);
-        return {
-          ...habit,
-          ...value,
-          checks,
-          completed: checks.length >= target,
-        };
-      }),
-    );
     setHabitNotice(`${value.name} 습관이 수정되었습니다.`);
     setScreen("habit");
   };
   const deleteHabit = async () => {
     try {
-      if (token) await habitApi.remove(editingHabitId, token);
+      if (!hasSession) throw new Error("로그인 후 이용해 주세요.");
+      await habitApi.remove(editingHabitId, token);
       setDataError("");
     } catch (error) { setDataError(error.message || "습관을 삭제하지 못했습니다."); return; }
     setHabits((current) => current.filter((habit) => habit.id !== editingHabitId));
@@ -147,6 +115,7 @@ export default function App() {
         habits={habits}
         onToggleCheck={toggleHabitCheck}
         onEdit={openEdit}
+        token={token}
       />
     ) : screen === "habit" ? (
       <Habit
@@ -161,23 +130,33 @@ export default function App() {
       <Mypage
         onNavigate={(next) => next === "password-recovery" ? openRecovery("mypage") : setScreen(next)}
         streak={Math.max(0, ...habits.map((habit) => habit.streak ?? 0))}
-        currentPassword={currentPassword}
+        token={token}
+        onLogout={async () => {
+          try { if (hasSession) await authApi.logout(token); } catch (error) { setDataError(error.message || "로그아웃에 실패했습니다."); return; }
+          localStorage.removeItem("sprout-token"); setToken(""); setHasSession(false); setHabits([]); setDataError(""); setScreen("login");
+        }}
+        onDeleteAccount={async (password) => {
+          await authApi.resign(token, { password });
+          localStorage.removeItem("sprout-token"); setToken(""); setHasSession(false); setHabits([]); setScreen("login");
+        }}
       />
     ) : screen === "ranking" ? (
-      <Ranking onNavigate={setScreen} token={token} />
+      <Ranking onNavigate={setScreen} token={token} streak={Math.max(0, ...habits.map((habit) => habit.streak ?? 0))} />
     ) : screen === "habit-create" ? (
       <HabitForm
         mode="create"
         onNavigate={setScreen}
         onSave={async (value) => {
           try {
-            const result = token ? await (value.frequency === "일주일" ? habitApi.createWeek(value, token) : habitApi.createDay(value, token)) : null;
+            if (!hasSession) throw new Error("로그인 후 이용해 주세요.");
+            const result = await (value.frequency === "일주일" ? habitApi.createWeek(value, token) : habitApi.createDay(value, token));
             setDataError("");
             const created = result?.habit ?? result?.data?.habit ?? result?.data ?? result;
-          setHabits((current) => [
-            ...current,
-            { ...value, ...(created && typeof created === "object" ? created : {}), id: created?.id ?? created?.habitId ?? crypto.randomUUID(), checks: [], streak: 0 },
-          ]);
+            if (created && typeof created === "object" && (created.id ?? created.habitId)) {
+              setHabits((current) => [...current, ...normalizeHabits([created])]);
+            } else {
+              setHabits(normalizeHabits(await habitApi.list(token)));
+            }
           setHabitNotice("습관이 생성되었습니다.");
           setScreen("habit");
           } catch (error) { setDataError(error.message || "습관을 생성하지 못했습니다."); }
@@ -209,12 +188,8 @@ export default function App() {
       />
     ) : screen === "password-change" ? (
       <PasswordChange
-        currentPassword={currentPassword}
-        onComplete={(nextPassword) => {
-          setCurrentPassword(nextPassword);
-          setAuthNotice("비밀번호가 변경되었습니다.");
-          setScreen("mypage");
-        }}
+        token={token}
+        onComplete={() => { setAuthNotice("비밀번호가 변경되었습니다."); setScreen("mypage"); }}
         onNavigate={setScreen}
       />
     ) : (
@@ -223,6 +198,7 @@ export default function App() {
         onForgotPassword={() => openRecovery("login")}
         onLogin={(nextToken) => {
           setToken(nextToken || "");
+          setHasSession(true);
           if (nextToken) localStorage.setItem("sprout-token", nextToken);
           setScreen("home");
         }}

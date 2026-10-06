@@ -2,21 +2,56 @@ import { useEffect, useState } from "react";
 import profileImage from "../assets/profile.svg";
 import logo from "../assets/logo.svg";
 import BottomNav from "../components/BottomNav.jsx";
+import { userApi } from "../lib/endpoints.js";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const namePattern = /^[a-zA-Z0-9_]{3,12}$/;
-
-export default function Mypage({ onNavigate, streak = 0, currentPassword = "habit1000" }) {
+const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,30}$/;
+export default function Mypage({
+  onNavigate,
+  streak = 0,
+  token,
+  onLogout,
+  onDeleteAccount,
+}) {
   const [editing, setEditing] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [saved, setSaved] = useState(false);
   const [saveAttempted, setSaveAttempted] = useState(false);
   const [deletePassword, setDeletePassword] = useState("");
   const [deleteAttempted, setDeleteAttempted] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [requestError, setRequestError] = useState("");
+  const [loading, setLoading] = useState(true);
   const [form, setForm] = useState({
-    email: "habit10@sprout.com",
-    name: "habit10",
+    email: "",
+    name: "",
   });
+  useEffect(() => {
+    let active = true;
+    userApi
+      .getMe(token)
+      .then((result) => {
+        const profile =
+          result?.user ?? result?.data?.user ?? result?.data ?? result;
+        if (active)
+          setForm({
+            email: profile?.email ?? "",
+            name: profile?.name ?? profile?.userName ?? "",
+          });
+      })
+      .catch((error) => {
+        if (active)
+          setRequestError(error.message || "회원 정보를 불러오지 못했습니다.");
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [token]);
   const change = (key) => (event) =>
     setForm((value) => ({ ...value, [key]: event.target.value }));
   const errors = {
@@ -24,36 +59,46 @@ export default function Mypage({ onNavigate, streak = 0, currentPassword = "habi
       saveAttempted && !emailPattern.test(form.email)
         ? "올바른 이메일 형식을 입력해주세요."
         : "",
-    name:
-      saveAttempted && !namePattern.test(form.name)
-        ? "아이디는 영문, 숫자, 밑줄 3~12자로 입력해주세요."
-        : "",
+    name: saveAttempted && !form.name.trim() ? "이름을 입력해주세요." : "",
+    currentPassword: saveAttempted && !currentPassword ? "현재 비밀번호를 입력해주세요." : "",
+    newPassword: saveAttempted && !passwordPattern.test(newPassword) ? "새 비밀번호 형식을 확인해주세요." : "",
+    confirmPassword: saveAttempted && newPassword !== confirmPassword ? "새 비밀번호가 일치하지 않습니다." : "",
   };
   const deleteError =
     deleteAttempted && deletePassword.length < 8
       ? "비밀번호는 8자 이상 입력해주세요."
-      : deleteAttempted && deletePassword !== currentPassword
-        ? "비밀번호가 일치하지 않습니다."
-        : "";
-  const save = () => {
+      : "";
+  const save = async () => {
     setSaveAttempted(true);
-    if (
-      !emailPattern.test(form.email) ||
-      !namePattern.test(form.name)
-    )
-      return;
-    setEditing(false);
-    setSaved(true);
+    if (!emailPattern.test(form.email) || !form.name.trim() || !currentPassword || !passwordPattern.test(newPassword) || newPassword !== confirmPassword) return;
+    setRequestError("");
+    try {
+      await userApi.updateMe(
+        { userId: form.name.trim(), email: form.email.trim(), currentPassword, newPassword },
+        token,
+      );
+      setEditing(false);
+      setSaved(true);
+      setCurrentPassword(""); setNewPassword(""); setConfirmPassword("");
+    } catch (error) {
+      setRequestError(error.message || "회원 정보를 수정하지 못했습니다.");
+    }
   };
   const startEditing = () => {
     setSaved(false);
     setSaveAttempted(false);
+    setCurrentPassword(""); setNewPassword(""); setConfirmPassword("");
     setEditing(true);
   };
-  const deleteAccount = () => {
+  const deleteAccount = async () => {
     setDeleteAttempted(true);
-    if (deletePassword.length < 8 || deletePassword !== currentPassword) return;
-    onNavigate("splash");
+    if (deletePassword.length < 8) return;
+    setRequestError("");
+    try {
+      await onDeleteAccount(deletePassword);
+    } catch (error) {
+      setRequestError(error.message || "회원 탈퇴에 실패했습니다.");
+    }
   };
   useEffect(() => {
     if (!saved) return undefined;
@@ -71,7 +116,9 @@ export default function Mypage({ onNavigate, streak = 0, currentPassword = "habi
           <small>연속 인증</small>
         </div>
       </header>
-      <main className={`profile-content ${editing ? "is-editing" : ""} ${saved ? "is-saved" : ""}`}>
+      <main
+        className={`profile-content ${editing ? "is-editing" : ""} ${saved ? "is-saved" : ""}`}
+      >
         <div className="profile-hero">
           <img
             className="profile-avatar"
@@ -79,8 +126,8 @@ export default function Mypage({ onNavigate, streak = 0, currentPassword = "habi
             alt="프로필 사진"
           />
           <div className="profile-identity">
-            <b>{form.name}</b>
-            <button type="button" onClick={() => onNavigate("login")}>
+            <b>{loading ? "불러오는 중…" : form.name}</b>
+            <button type="button" onClick={onLogout}>
               로그아웃하기
             </button>
           </div>
@@ -100,7 +147,7 @@ export default function Mypage({ onNavigate, streak = 0, currentPassword = "habi
             )}
           </label>
           <label>
-            아이디
+            이름
             <input
               className={errors.name ? "has-error" : ""}
               value={form.name}
@@ -112,10 +159,15 @@ export default function Mypage({ onNavigate, streak = 0, currentPassword = "habi
             )}
           </label>
         </section>
-        {editing && <button type="button" className="profile-password-link" onClick={() => onNavigate("password-change")}>
-          비밀번호 수정
-        </button>}
-        {saveAttempted && (errors.email || errors.name) && (
+        {editing && (
+          <section className="profile-info">
+            <label>현재 비밀번호<input type="password" value={currentPassword} onChange={(event) => setCurrentPassword(event.target.value)} autoComplete="current-password" />{errors.currentPassword && <small className="error-message">{errors.currentPassword}</small>}</label>
+            <label>새 비밀번호<input type="password" value={newPassword} onChange={(event) => setNewPassword(event.target.value)} autoComplete="new-password" />{errors.newPassword && <small className="error-message">{errors.newPassword}</small>}</label>
+            <label>새 비밀번호 확인<input type="password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} autoComplete="new-password" />{errors.confirmPassword && <small className="error-message">{errors.confirmPassword}</small>}</label>
+          </section>
+        )}
+        {requestError && <p className="profile-save-error" role="alert">{requestError}</p>}
+        {saveAttempted && (errors.email || errors.name || errors.currentPassword || errors.newPassword || errors.confirmPassword) && (
           <p className="profile-save-error">형식에 맞게 입력해주세요.</p>
         )}
         {saved && <p className="save-message">수정이 완료되었습니다.</p>}
@@ -140,13 +192,15 @@ export default function Mypage({ onNavigate, streak = 0, currentPassword = "habi
             </button>
           )}
         </div>
-        {editing && <button
-          type="button"
-          className="delete-account profile-delete-account"
-          onClick={() => setConfirmDelete(true)}
-        >
-          회원 탈퇴
-        </button>}
+        {editing && (
+          <button
+            type="button"
+            className="delete-account profile-delete-account"
+            onClick={() => setConfirmDelete(true)}
+          >
+            회원 탈퇴
+          </button>
+        )}
       </main>
       <BottomNav active="mypage" onNavigate={onNavigate} />
       {confirmDelete && (

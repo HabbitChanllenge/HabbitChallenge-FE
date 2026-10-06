@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { authApi } from "../lib/endpoints.js";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,30}$/;
@@ -12,22 +13,36 @@ export default function PasswordRecovery({ onBack, onComplete }) {
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [attempted, setAttempted] = useState(false);
+  const [requestError, setRequestError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const passwordError = attempted && !passwordPattern.test(password)
     ? passwordGuide
     : attempted && password !== confirm ? "비밀번호가 일치하지 않습니다." : "";
   const confirmError = attempted && passwordPattern.test(password) && password !== confirm
     ? "비밀번호가 일치하지 않습니다." : "";
-  const requestCode = () => {
-    if (emailPattern.test(email)) setSent(true);
+  const requestCode = async () => {
+    if (!emailPattern.test(email)) return;
+    setLoading(true); setRequestError("");
+    try { await authApi.sendPasswordResetEmail({ email }); setSent(true); setVerified(false); }
+    catch (error) { setRequestError(error.message || "인증번호를 보내지 못했습니다."); }
+    finally { setLoading(false); }
   };
-  const verifyCode = () => {
-    if (code === "123456" && sent) setVerified(true);
+  const verifyCode = async () => {
+    if (!sent || !code) return;
+    setLoading(true); setRequestError("");
+    try { await authApi.verifyPasswordResetCode({ email, code }); setVerified(true); }
+    catch (error) { setRequestError(error.message || "인증번호를 확인하지 못했습니다."); }
+    finally { setLoading(false); }
   };
-  const submit = (event) => {
+  const submit = async (event) => {
     event.preventDefault();
     setAttempted(true);
-    if (verified && passwordPattern.test(password) && password === confirm) onComplete();
+    if (!verified || !passwordPattern.test(password) || password !== confirm) return;
+    setLoading(true); setRequestError("");
+    try { await authApi.resetPassword({ email, code, password }); onComplete(); }
+    catch (error) { setRequestError(error.message || "비밀번호를 변경하지 못했습니다."); }
+    finally { setLoading(false); }
   };
 
   return (
@@ -42,7 +57,7 @@ export default function PasswordRecovery({ onBack, onComplete }) {
         <label className="field"><span>인증번호</span>
           <input inputMode="numeric" value={code} onChange={(e) => setCode(e.target.value)} placeholder="인증 번호를 입력해 주세요." />
           <button type="button" className="verify-button" onClick={verifyCode} disabled={!sent || !code}>인증 번호 확인</button>
-          {sent && <small className={verified ? "success-message" : "recovery-hint"}>{verified ? "인증이 완료되었습니다." : "테스트 인증번호: 123456"}</small>}
+          {verified && <small className="success-message">인증이 완료되었습니다.</small>}
         </label>
         <label className="field"><span>새 비밀번호</span>
           <input className={attempted && !passwordPattern.test(password) ? "has-error" : ""} type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="새 비밀번호를 입력해 주세요." autoComplete="new-password" />
@@ -52,7 +67,8 @@ export default function PasswordRecovery({ onBack, onComplete }) {
           {(passwordError || confirmError) && <small className="error-message">{passwordError || confirmError}</small>}
         </label>
       </div>
-      <button className="primary-button recovery-submit" type="submit">비밀번호 변경하기</button>
+      {requestError && <p className="error-message" role="alert">{requestError}</p>}
+      <button className="primary-button recovery-submit" type="submit" disabled={loading}>{loading ? "처리 중…" : "비밀번호 변경하기"}</button>
     </form>
   );
 }
