@@ -1355,35 +1355,35 @@ input:focus {
   color: #83bd08;
 }
 .home-empty-state {
-  min-height: 96px;
-  height: 96px;
+  min-height: 120px;
+  height: 120px;
   box-sizing: border-box;
   display: grid;
-  grid-template-rows: auto 20px;
+  grid-template-rows: auto 26px;
   align-content: space-between;
   justify-items: stretch;
-  gap: 12px;
+  gap: 14px;
   border: 0;
   border-radius: 12px;
-  padding: 11px 13px;
+  padding: 16px 18px;
   background: #d9d9d9;
   color: #333;
   text-align: left;
 }
 .home-empty-state p {
   margin: 0;
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 600;
 }
 .home-empty-state button {
   width: 100%;
   min-width: 0;
-  height: 20px;
-  flex: 0 0 20px;
+  height: 26px;
+  flex: 0 0 26px;
   border-radius: 80px;
   background: #95cd1a;
   color: #fff;
-  font-size: 9px;
+  font-size: 12px;
 }
 .mypage-page .profile-content.is-editing .profile-hero {
   justify-content: center;
