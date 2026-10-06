@@ -49,7 +49,7 @@ function normalizeHabits(result) {
       ...habit,
       id: habit.id ?? habit.habitId ?? index,
       name: habit.name ?? habit.title ?? "",
-      frequency: habit.frequency ?? (isWeekly ? "\uC8FC\uAC04" : "\uD558\uB8E8"),
+      frequency: habit.frequency ?? (isWeekly ? "\uC77C\uC8FC\uC77C" : "\uD558\uB8E8"),
       category: categories[0] ?? "",
       checks,
       verificationDays,
