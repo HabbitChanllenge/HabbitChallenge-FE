@@ -62,9 +62,9 @@ export default function Habit({
         </section>
         {habits.length ? (
           <div className="habit-list habit-list-scroll">
-            {habits.map((habit) => (
+            {habits.map((habit, index) => (
               <HabitCard
-                key={habit.id}
+                key={habit.id ?? index}
                 habit={habit}
                 onToggleCheck={onToggleCheck}
                 onEdit={onEdit}

@@ -47,7 +47,7 @@ function normalizeHabits(result) {
 
     return {
       ...habit,
-      id: habit.id ?? habit.habitId ?? index,
+      id: habit.id ?? habit.habitId ?? habit.habit_id ?? null,
       name: habit.name ?? habit.title ?? "",
       frequency: habit.frequency ?? (isWeekly ? "\uC77C\uC8FC\uC77C" : "\uD558\uB8E8"),
       category: categories[0] ?? "",

@@ -28,7 +28,7 @@ export default function HabitCard({ habit, onEdit, onToggleCheck }) {
         <button type="button" onClick={() => setShowChecks((value) => !value)}>
           인증
         </button>
-        <button type="button" onClick={() => onEdit(habit.id)}>
+        <button type="button" disabled={habit.id == null} onClick={() => onEdit(habit.id)}>
           수정
         </button>
         <button type="button">연속 성공 {habit.streak ?? 0}일</button>
