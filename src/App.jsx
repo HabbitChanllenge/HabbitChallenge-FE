@@ -222,6 +222,7 @@ export default function App() {
           setHabitsUnavailable(false);
           setDataError("");
           if (nextToken) localStorage.setItem("sprout-token", nextToken);
+          else localStorage.removeItem("sprout-token");
           setScreen("home");
         }}
       />

@@ -1,7 +1,19 @@
 import { useState } from "react";
-import { authApi } from "../lib/endpoints.js";
+import { authApi, userApi } from "../lib/endpoints.js";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function extractToken(value, depth = 0) {
+  if (!value || typeof value !== "object" || depth > 5) return "";
+  for (const key of ["accessToken", "access_token", "token", "jwt"]) {
+    if (typeof value[key] === "string" && value[key]) return value[key];
+  }
+  for (const nested of Object.values(value)) {
+    const token = extractToken(nested, depth + 1);
+    if (token) return token;
+  }
+  return "";
+}
 
 export default function Login({ onSignup, onLogin, onForgotPassword }) {
   const [email, setEmail] = useState("");
@@ -25,12 +37,18 @@ export default function Login({ onSignup, onLogin, onForgotPassword }) {
     if (!emailPattern.test(email) || password.length < 8) return;
     setLoading(true);
     setRequestError("");
+    let loginAccepted = false;
     try {
       const result = await authApi.login({ email, password });
-      const token = result?.token ?? result?.accessToken ?? result?.data?.token ?? result?.data?.accessToken ?? "";
+      loginAccepted = true;
+      const token = extractToken(result);
+      if (!token) await userApi.getMe();
       onLogin(token);
     } catch (error) {
-      if (error.status === 401) {
+      if (loginAccepted) {
+        setCredentialsRejected(false);
+        setRequestError("로그인 응답에서 인증 세션을 확인하지 못했습니다. 백엔드 로그인 응답의 토큰 또는 쿠키 설정을 확인해 주세요.");
+      } else if (error.status === 401) {
         setCredentialsRejected(true);
         setRequestError("이메일 또는 비밀번호를 확인해 주세요.");
       } else {
