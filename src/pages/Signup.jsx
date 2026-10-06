@@ -43,10 +43,7 @@ export default function Signup({ onLogin, onComplete }) {
   const update = (key) => (value) =>
     setForm((current) => ({ ...current, [key]: value }));
   const errors = {
-    name:
-      submitted && !/^[a-zA-Z0-9_]{3,12}$/.test(form.name)
-        ? "아이디는 영문, 숫자, 밑줄 3~12자로 입력해주세요."
-        : "",
+    name: submitted && !form.name.trim() ? "이름을 입력해주세요." : "",
     email:
       submitted && !emailPattern.test(form.email)
         ? "올바른 이메일 형식을 입력해주세요."
@@ -63,12 +60,12 @@ export default function Signup({ onLogin, onComplete }) {
   const submit = async (event) => {
     event.preventDefault();
     setSubmitted(true);
-    const valid = /^[a-zA-Z0-9_]{3,12}$/.test(form.name) && emailPattern.test(form.email) && form.password.length >= 8 && form.password === form.confirm;
+    const valid = Boolean(form.name.trim()) && emailPattern.test(form.email) && form.password.length >= 8 && form.password === form.confirm;
     if (!valid) return;
     setLoading(true);
     setRequestError("");
     try {
-      await authApi.signup({ username: form.name, name: form.name, email: form.email, password: form.password });
+      await authApi.signup({ userId: form.name.trim(), email: form.email.trim(), password: form.password });
       onComplete();
     } catch (error) {
       setRequestError(error.message || "회원가입에 실패했습니다.");
@@ -80,13 +77,13 @@ export default function Signup({ onLogin, onComplete }) {
       <h1>계정 만들기</h1>
       <div className="form-fields">
         <label className="field">
-          <span>아이디</span>
+          <span>이름</span>
           <input
             className={errors.name ? "has-error" : ""}
             value={form.name}
             onChange={(event) => update("name")(event.target.value)}
-            placeholder="앱에서 불릴 이름을 입력해주세요."
-            autoComplete="username"
+            placeholder="이름을 입력해주세요."
+            autoComplete="name"
           />
           {errors.name && (
             <small className="error-message">{errors.name}</small>
