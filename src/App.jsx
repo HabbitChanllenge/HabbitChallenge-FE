@@ -13,16 +13,24 @@ import PasswordChange from "./pages/PasswordChange.jsx";
 import { authApi, habitApi } from "./lib/endpoints.js";
 
 function normalizeHabits(result) {
-  const rows = Array.isArray(result) ? result : result?.habits ?? result?.data?.habits ?? result?.data ?? [];
-  return Array.isArray(rows) ? rows.map((habit, index) => ({
-    ...habit,
-    id: habit.id ?? habit.habitId ?? index,
-    name: habit.name ?? habit.title ?? "습관",
-    checks: habit.checks ?? [],
-    verificationDays: habit.verificationDays ?? habit.days ?? [],
-    verificationCount: Number(habit.verificationCount ?? habit.targetCount ?? 1),
-    streak: Number(habit.streak ?? habit.streakDays ?? 0),
-  })) : [];
+  const rows = Array.isArray(result)
+    ? result
+    : (result?.habits ?? result?.data?.habits ?? result?.data ?? []);
+  return Array.isArray(rows)
+    ? rows.map((habit, index) => ({
+        ...habit,
+        id: habit.id ?? habit.habitId ?? index,
+        name: habit.name ?? habit.title ?? "습관",
+        frequency: habit.frequency ?? (String(habit.periodType ?? "").toUpperCase().includes("WEEK") ? "일주일" : "하루"),
+        category: habit.category ?? habit.categories?.[0] ?? "기타",
+        checks: habit.checks ?? [],
+        verificationDays: habit.verificationDays ?? habit.days ?? (habit.dayOfWeek ?? []).map((day) => ["월", "화", "수", "목", "금", "토", "일"][Number(day) - 1]).filter(Boolean),
+        verificationCount: Number(
+          habit.verificationCount ?? habit.totalRepeat ?? habit.targetCount ?? 1,
+        ),
+        streak: Number(habit.streak ?? habit.streakDays ?? 0),
+      }))
+    : [];
 }
 
 export default function App() {
@@ -32,15 +40,20 @@ export default function App() {
   const [habitNotice, setHabitNotice] = useState("");
   const [authNotice, setAuthNotice] = useState("");
   const [recoveryReturn, setRecoveryReturn] = useState("login");
-  const [token, setToken] = useState(() => localStorage.getItem("sprout-token") || "");
-  const [hasSession, setHasSession] = useState(() => Boolean(localStorage.getItem("sprout-token")));
+  const [token, setToken] = useState(
+    () => localStorage.getItem("sprout-token") || "",
+  );
+  const [hasSession, setHasSession] = useState(() =>
+    Boolean(localStorage.getItem("sprout-token")),
+  );
   const [dataError, setDataError] = useState("");
   const [habitsLoading, setHabitsLoading] = useState(false);
   const [habitsUnavailable, setHabitsUnavailable] = useState(false);
   const [networkRevision, setNetworkRevision] = useState(0);
 
   useEffect(() => {
-    const retryWhenOnline = () => setNetworkRevision((revision) => revision + 1);
+    const retryWhenOnline = () =>
+      setNetworkRevision((revision) => revision + 1);
     window.addEventListener("online", retryWhenOnline);
     return () => window.removeEventListener("online", retryWhenOnline);
   }, []);
@@ -52,14 +65,23 @@ export default function App() {
     }
     let active = true;
     setHabitsLoading(true);
-    habitApi.list(token).then((result) => {
-      if (active) {
-        setHabits(normalizeHabits(result));
-        setHabitsUnavailable(false);
-      }
-    }).catch(() => { if (active) setHabitsUnavailable(true); })
-      .finally(() => { if (active) setHabitsLoading(false); });
-    return () => { active = false; };
+    habitApi
+      .list(token)
+      .then((result) => {
+        if (active) {
+          setHabits(normalizeHabits(result));
+          setHabitsUnavailable(false);
+        }
+      })
+      .catch(() => {
+        if (active) setHabitsUnavailable(true);
+      })
+      .finally(() => {
+        if (active) setHabitsLoading(false);
+      });
+    return () => {
+      active = false;
+    };
   }, [token, hasSession, networkRevision]);
   const isSignup = screen === "signup";
   const isRecovery = screen === "password-recovery";
@@ -89,10 +111,17 @@ export default function App() {
     const habit = habits.find((item) => item.id === habitId);
     const existing = habit?.checks ?? [];
     try {
-      await habitApi.verify(habitId, { completed: !existing.includes(index), checkIndex: index }, token);
+      await habitApi.verify(
+        habitId,
+        { completed: !existing.includes(index), checkIndex: index },
+        token,
+      );
       setHabits(normalizeHabits(await habitApi.list(token)));
       setDataError("");
-    } catch (error) { setDataError(error.message || "습관 인증을 저장하지 못했습니다."); return; }
+    } catch (error) {
+      setDataError(error.message || "습관 인증을 저장하지 못했습니다.");
+      return;
+    }
   };
 
   const openEdit = (habitId) => {
@@ -104,7 +133,10 @@ export default function App() {
       await habitApi.update(editingHabitId, value, token);
       setHabits(normalizeHabits(await habitApi.list(token)));
       setDataError("");
-    } catch (error) { setDataError(error.message || "습관을 수정하지 못했습니다."); return; }
+    } catch (error) {
+      setDataError(error.message || "습관을 수정하지 못했습니다.");
+      return;
+    }
     setHabitNotice(`${value.name} 습관이 수정되었습니다.`);
     setScreen("habit");
   };
@@ -113,8 +145,13 @@ export default function App() {
       if (!hasSession) throw new Error("로그인 후 이용해 주세요.");
       await habitApi.remove(editingHabitId, token);
       setDataError("");
-    } catch (error) { setDataError(error.message || "습관을 삭제하지 못했습니다."); return; }
-    setHabits((current) => current.filter((habit) => habit.id !== editingHabitId));
+    } catch (error) {
+      setDataError(error.message || "습관을 삭제하지 못했습니다.");
+      return;
+    }
+    setHabits((current) =>
+      current.filter((habit) => habit.id !== editingHabitId),
+    );
     setEditingHabitId(null);
     setScreen("habit");
   };
@@ -147,20 +184,42 @@ export default function App() {
       />
     ) : screen === "mypage" ? (
       <Mypage
-        onNavigate={(next) => next === "password-recovery" ? openRecovery("mypage") : setScreen(next)}
+        onNavigate={(next) =>
+          next === "password-recovery"
+            ? openRecovery("mypage")
+            : setScreen(next)
+        }
         streak={Math.max(0, ...habits.map((habit) => habit.streak ?? 0))}
         token={token}
         onLogout={async () => {
-          try { if (hasSession) await authApi.logout(token); } catch (error) { setDataError(error.message || "로그아웃에 실패했습니다."); return; }
-          localStorage.removeItem("sprout-token"); setToken(""); setHasSession(false); setHabits([]); setDataError(""); setScreen("login");
+          try {
+            if (hasSession) await authApi.logout(token);
+          } catch (error) {
+            setDataError(error.message || "로그아웃에 실패했습니다.");
+            return;
+          }
+          localStorage.removeItem("sprout-token");
+          setToken("");
+          setHasSession(false);
+          setHabits([]);
+          setDataError("");
+          setScreen("login");
         }}
         onDeleteAccount={async (password) => {
           await authApi.resign(token, { password });
-          localStorage.removeItem("sprout-token"); setToken(""); setHasSession(false); setHabits([]); setScreen("login");
+          localStorage.removeItem("sprout-token");
+          setToken("");
+          setHasSession(false);
+          setHabits([]);
+          setScreen("login");
         }}
       />
     ) : screen === "ranking" ? (
-      <Ranking onNavigate={setScreen} token={token} streak={Math.max(0, ...habits.map((habit) => habit.streak ?? 0))} />
+      <Ranking
+        onNavigate={setScreen}
+        token={token}
+        streak={Math.max(0, ...habits.map((habit) => habit.streak ?? 0))}
+      />
     ) : screen === "habit-create" ? (
       <HabitForm
         mode="create"
@@ -168,17 +227,29 @@ export default function App() {
         onSave={async (value) => {
           try {
             if (!hasSession) throw new Error("로그인 후 이용해 주세요.");
-            const result = await (value.frequency === "일주일" ? habitApi.createWeek(value, token) : habitApi.createDay(value, token));
+            const result = await (value.frequency === "일주일"
+              ? habitApi.createWeek(value, token)
+              : habitApi.createDay(value, token));
             setDataError("");
-            const created = result?.habit ?? result?.data?.habit ?? result?.data ?? result;
-            if (created && typeof created === "object" && (created.id ?? created.habitId)) {
-              setHabits((current) => [...current, ...normalizeHabits([created])]);
+            const created =
+              result?.habit ?? result?.data?.habit ?? result?.data ?? result;
+            if (
+              created &&
+              typeof created === "object" &&
+              (created.id ?? created.habitId)
+            ) {
+              setHabits((current) => [
+                ...current,
+                ...normalizeHabits([created]),
+              ]);
             } else {
               setHabits(normalizeHabits(await habitApi.list(token)));
             }
-          setHabitNotice("습관이 생성되었습니다.");
-          setScreen("habit");
-          } catch (error) { setDataError(error.message || "습관을 생성하지 못했습니다."); }
+            setHabitNotice("습관이 생성되었습니다.");
+            setScreen("habit");
+          } catch (error) {
+            setDataError(error.message || "습관을 생성하지 못했습니다.");
+          }
         }}
       />
     ) : screen === "habit-edit" ? (
@@ -208,7 +279,10 @@ export default function App() {
     ) : screen === "password-change" ? (
       <PasswordChange
         token={token}
-        onComplete={() => { setAuthNotice("비밀번호가 변경되었습니다."); setScreen("mypage"); }}
+        onComplete={() => {
+          setAuthNotice("비밀번호가 변경되었습니다.");
+          setScreen("mypage");
+        }}
         onNavigate={setScreen}
       />
     ) : (
@@ -234,7 +308,11 @@ export default function App() {
         className={`phone-frame ${isSignup ? "signup-mode" : ""} ${isRecovery ? "recovery-mode" : ""} ${isHome ? "home-mode" : ""}`}
       >
         {content}
-        {dataError && <p className="auth-notice" role="alert">{dataError}</p>}
+        {dataError && (
+          <p className="auth-notice" role="alert">
+            {dataError}
+          </p>
+        )}
         {authNotice && <p className="auth-notice">{authNotice}</p>}
         <div className="home-indicator" />
       </section>

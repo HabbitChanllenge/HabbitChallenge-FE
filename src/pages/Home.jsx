@@ -71,7 +71,7 @@ export default function Home({ onNavigate, habits, onToggleCheck, onEdit, token,
         ) : (
           <div className="empty-state home-empty-state">
             <p>아직 습관이 없습니다</p>
-            <button type="button" onClick={() => onNavigate("habit-create")}>
+            <button type="button" onClick={() => onNavigate("")}>
               습관 생성
             </button>
           </div>
