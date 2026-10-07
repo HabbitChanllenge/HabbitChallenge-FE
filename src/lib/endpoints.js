@@ -74,7 +74,7 @@ export const userApi = {
 };
 
 export const habitApi = {
-  list: (token) => apiRequest("/habits", { token }),
+  list: (token) => apiRequest("/habits", { token, cache: "no-store" }),
   createDay: (body, token) =>
     apiRequest("/habits/day", {
       method: "POST",
@@ -97,9 +97,17 @@ export const habitApi = {
           ? body.categories
           : [body.category];
     }
-    const isWeekly = body.dayOfWeek !== undefined || (body.verificationDays?.length ?? 0) > 0 || /week/i.test(body.frequency ?? body.periodType ?? "");
-    if (!isWeekly && (body.totalRepeat !== undefined || body.verificationCount !== undefined)) {
-      requestBody.totalRepeat = Number(body.totalRepeat ?? body.verificationCount);
+    const isWeekly =
+      body.dayOfWeek !== undefined ||
+      (body.verificationDays?.length ?? 0) > 0 ||
+      /week/i.test(body.frequency ?? body.periodType ?? "");
+    if (
+      !isWeekly &&
+      (body.totalRepeat !== undefined || body.verificationCount !== undefined)
+    ) {
+      requestBody.totalRepeat = Number(
+        body.totalRepeat ?? body.verificationCount,
+      );
     }
     return apiRequest(withId("/habits/update/:id", id), {
       method: "PATCH",
@@ -110,7 +118,11 @@ export const habitApi = {
   remove: (id, token) =>
     apiRequest(withId("/habits/:id", id), { method: "DELETE", token }),
   verify: (id, completedCount, token) =>
-    apiRequest(withId("/habit/:id", id), { method: "PATCH", body: { completedCount }, token }),
+    apiRequest(withId("/habit/:id", id), {
+      method: "PATCH",
+      body: { completedCount },
+      token,
+    }),
 };
 
 export const streakApi = {

@@ -168,16 +168,22 @@ export default function App() {
   };
   const deleteHabit = async () => {
     try {
-      if (!hasSession) throw new Error("로그인 후 이용해 주세요.");
+      if (!hasSession) throw new Error("\uB85C\uADF8\uC778\uC774 \uD544\uC694\uD569\uB2C8\uB2E4.");
       await habitApi.remove(editingHabitId, token);
+      const refreshedHabits = normalizeHabits(await habitApi.list(token));
+      setHabits(refreshedHabits);
+      const isStillListed = refreshedHabits.some(
+        (habit) => String(habit.id) === String(editingHabitId),
+      );
+      if (isStillListed) {
+        setDataError("\uC0AD\uC81C \uC751\uB2F5\uC740 \uC131\uACF5\uD588\uC9C0\uB9CC \uC2B5\uAD00 \uBAA9\uB85D\uC5D0 \uB0A8\uC544 \uC788\uC5B4\uC694. \uBC31\uC5D4\uB4DC \uC0AD\uC81C \uACBD\uB85C\uB97C \uD655\uC778\uD574\uC8FC\uC138\uC694.");
+        return;
+      }
       setDataError("");
     } catch (error) {
-      setDataError(error.message || "습관을 삭제하지 못했습니다.");
+      setDataError(error.message || "\uC2B5\uAD00\uC744 \uC0AD\uC81C\uD558\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4.");
       return;
     }
-    setHabits((current) =>
-      current.filter((habit) => habit.id !== editingHabitId),
-    );
     setEditingHabitId(null);
     setScreen("habit");
   };
