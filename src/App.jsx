@@ -145,7 +145,13 @@ export default function App() {
       setHabits(normalizeHabits(await habitApi.list(token)));
       setDataError("");
     } catch (error) {
-      setDataError(error.message || "습관 인증을 저장하지 못했습니다.");
+      const responseCode = Number(error.data?.message);
+      const errorMessage = responseCode === 400
+        ? "인증 요청이 올바르지 않습니다."
+        : responseCode === 500
+          ? "서버 오류로 인증을 저장하지 못했습니다."
+          : error.message || "습관 인증을 저장하지 못했습니다.";
+      setDataError(errorMessage);
       return;
     }
   };

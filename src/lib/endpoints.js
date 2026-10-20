@@ -120,7 +120,7 @@ export const habitApi = {
   verify: (id, completedCount, token) =>
     apiRequest(withId("/habit/:id", id), {
       method: "PATCH",
-      body: { completedCount },
+      body: { completedCount: Number(completedCount) },
       token,
     }),
 };
