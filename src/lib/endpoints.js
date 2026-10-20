@@ -118,7 +118,7 @@ export const habitApi = {
   remove: (id, token) =>
     apiRequest(withId("/habits/:id", id), { method: "DELETE", token }),
   verify: (id, completedCount, token) =>
-    apiRequest(withId("/habit/:id", id), {
+    apiRequest(withId("/habits/:id", id), {
       method: "PATCH",
       body: { completedCount: Number(completedCount) },
       token,
