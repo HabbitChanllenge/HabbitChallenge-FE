@@ -1,23 +1,42 @@
 import { useEffect, useState } from "react";
 import { streakApi } from "./endpoints.js";
 
-function unwrap(value) {
+const rankingListKeys = [
+  "allStreak",
+  "allStreaks",
+  "streakList",
+  "rankList",
+  "rankings",
+  "ranking",
+  "streaks",
+  "users",
+  "items",
+  "content",
+  "result",
+  "data",
+  "list",
+  "+",
+];
+
+function unwrap(value, depth = 0) {
   if (Array.isArray(value)) return value;
-  for (const key of [
-    "+",
-    "data",
-    "rankings",
-    "ranking",
-    "streaks",
-    "users",
-    "items",
-    "content",
-    "result",
-    "list",
-  ]) {
-    if (value?.[key] != null) return unwrap(value[key]);
+  if (!value || typeof value !== "object" || depth > 5) return [];
+
+  for (const key of rankingListKeys) {
+    if (value[key] != null) {
+      const rows = unwrap(value[key], depth + 1);
+      if (rows.length > 0 || Array.isArray(value[key])) return rows;
+    }
   }
-  return [];
+
+  const nestedRows = Object.values(value)
+    .map((item) => unwrap(item, depth + 1))
+    .find((rows) => rows.length > 0);
+  if (nestedRows) return nestedRows;
+
+  const hasUser = ["id", "userId", "user_id", "name", "userName", "user_name", "username", "nickname"]
+    .some((key) => value[key] != null);
+  return hasUser ? [value] : [];
 }
 
 export function normalizeRanking(value) {
@@ -28,27 +47,38 @@ export function normalizeRanking(value) {
       id:
         row?.id ??
         row?.userId ??
+        row?.user_id ??
+        row?.userName ??
+        row?.user_name ??
         row?.username ??
         row?.name ??
         `user-${index + 1}`,
       name:
         row?.name ??
         row?.userId ??
+        row?.user_id ??
         row?.username ??
         row?.nickname ??
         row?.userName ??
+        row?.user_name ??
+        row?.memberName ??
+        row?.member_name ??
         `사용자 ${index + 1}`,
       days: Number(
         row?.streak ??
           row?.streakDays ??
           row?.streakCount ??
           row?.streak_count ??
+          row?.continuousDay ??
+          row?.continuous_day ??
+          row?.totalStreak ??
+          row?.total_streak ??
           row?.days ??
           row?.count ??
           row?.continuousDays ??
           0,
       ),
-      rank: Number(row?.rank ?? row?.ranking ?? index + 1),
+      rank: Number(row?.rank ?? row?.ranking ?? row?.rankNumber ?? row?.rank_number ?? index + 1),
     }))
     .sort((a, b) => a.rank - b.rank);
 }
