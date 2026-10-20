@@ -100,11 +100,18 @@ export function useRanking(token) {
     let active = true;
     setLoading(true);
     setError("");
-    streakApi
-      .all(token)
-      .catch(() => streakApi.ranking(token))
-      .then((data) => {
-        if (active) setUsers(normalizeRanking(data));
+    Promise.resolve()
+      .then(async () => {
+        try {
+          const allUsers = normalizeRanking(await streakApi.all(token));
+          if (allUsers.length > 0) return allUsers;
+        } catch {
+          // Fall back to the ranking endpoint when allStreak is unavailable.
+        }
+        return normalizeRanking(await streakApi.ranking(token));
+      })
+      .then((rankedUsers) => {
+        if (active) setUsers(rankedUsers);
       })
       .catch((reason) => {
         if (active) setError(reason.message || "랭킹을 불러오지 못했습니다.");
