@@ -12,6 +12,8 @@ function unwrap(value) {
     "users",
     "items",
     "content",
+    "result",
+    "list",
   ]) {
     if (value?.[key] != null) return unwrap(value[key]);
   }
@@ -39,6 +41,8 @@ export function normalizeRanking(value) {
       days: Number(
         row?.streak ??
           row?.streakDays ??
+          row?.streakCount ??
+          row?.streak_count ??
           row?.days ??
           row?.count ??
           row?.continuousDays ??
@@ -67,7 +71,8 @@ export function useRanking(token) {
     setLoading(true);
     setError("");
     streakApi
-      .ranking(token)
+      .all(token)
+      .catch(() => streakApi.ranking(token))
       .then((data) => {
         if (active) setUsers(normalizeRanking(data));
       })
