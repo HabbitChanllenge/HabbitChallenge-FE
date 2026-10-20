@@ -4,8 +4,13 @@ import { streakApi } from "./endpoints.js";
 const rankingListKeys = [
   "allStreak",
   "allStreaks",
-  "streakList",
+  "all_streak",
+  "rankData",
+  "rank_data",
   "rankList",
+  "rank_list",
+  "rank",
+  "streakList",
   "rankings",
   "ranking",
   "streaks",
@@ -71,6 +76,8 @@ export function normalizeRanking(value) {
           row?.streak_count ??
           row?.continuousDay ??
           row?.continuous_day ??
+        row?.continuousStreak ??
+        row?.continuous_streak ??
           row?.totalStreak ??
           row?.total_streak ??
           row?.days ??
