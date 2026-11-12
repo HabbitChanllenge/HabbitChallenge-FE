@@ -33,9 +33,7 @@ export default function Habit({
         <span />
         <img src={logo} alt="새싹루틴" />
         <div className="streak-badge">
-          <b>{streak}일</b>
-          <small>연속 인증</small>
-        </div>
+          <b>{streak}일</b></div>
       </header>
       <main className="habit-page-content">
         <div className="habit-title">

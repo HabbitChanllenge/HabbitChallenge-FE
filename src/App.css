@@ -579,30 +579,36 @@ input:focus {
 .bottom-nav {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  flex: 0 0 55px;
-  border-top: 1px solid #f0f0f0;
+  flex: 0 0 88px;
+  border-top: 1px solid #d9d9d9;
 }
 .bottom-nav button {
   display: grid;
   place-items: center;
   align-content: center;
-  gap: 2px;
+  gap: 4px;
   border: 0;
   background: #fff;
   color: #b9b9b9;
-  font-size: 8px;
+  font-size: 14px;
   cursor: pointer;
 }
-.bottom-nav span {
-  font-size: 18px;
+.bottom-nav svg {
+  width: 34px;
+  height: 34px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
   line-height: 1;
 }
 .bottom-nav small {
-  font-size: 8px;
+  font-size: 13px;
   line-height: 1;
 }
 .bottom-nav .active {
-  color: #81bf07;
+  color: #4f8100;
 }
 .sub-page {
   display: flex;

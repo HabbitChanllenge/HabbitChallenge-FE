@@ -60,16 +60,26 @@ export default function Signup({ onLogin, onComplete }) {
   const submit = async (event) => {
     event.preventDefault();
     setSubmitted(true);
-    const valid = Boolean(form.name.trim()) && emailPattern.test(form.email) && form.password.length >= 8 && form.password === form.confirm;
+    const valid =
+      Boolean(form.name.trim()) &&
+      emailPattern.test(form.email) &&
+      form.password.length >= 8 &&
+      form.password === form.confirm;
     if (!valid) return;
     setLoading(true);
     setRequestError("");
     try {
-      await authApi.signup({ userId: form.name.trim(), email: form.email.trim(), password: form.password });
+      await authApi.signup({
+        userId: form.name.trim(),
+        email: form.email.trim(),
+        password: form.password,
+      });
       onComplete();
     } catch (error) {
       setRequestError(error.message || "회원가입에 실패했습니다.");
-    } finally { setLoading(false); }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -119,7 +129,11 @@ export default function Signup({ onLogin, onComplete }) {
         />
       </div>
       <div className="form-bottom">
-        {requestError && <p className="error-message" role="alert">{requestError}</p>}
+        {requestError && (
+          <p className="error-message" role="alert">
+            {requestError}
+          </p>
+        )}
         <p>
           이미 계정이 있으신가요?{" "}
           <button type="button" className="text-button" onClick={onLogin}>

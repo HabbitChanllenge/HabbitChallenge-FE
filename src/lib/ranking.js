@@ -39,8 +39,16 @@ function unwrap(value, depth = 0) {
     .find((rows) => rows.length > 0);
   if (nestedRows) return nestedRows;
 
-  const hasUser = ["id", "userId", "user_id", "name", "userName", "user_name", "username", "nickname"]
-    .some((key) => value[key] != null);
+  const hasUser = [
+    "id",
+    "userId",
+    "user_id",
+    "name",
+    "userName",
+    "user_name",
+    "username",
+    "nickname",
+  ].some((key) => value[key] != null);
   return hasUser ? [value] : [];
 }
 
@@ -76,8 +84,8 @@ export function normalizeRanking(value) {
           row?.streak_count ??
           row?.continuousDay ??
           row?.continuous_day ??
-        row?.continuousStreak ??
-        row?.continuous_streak ??
+          row?.continuousStreak ??
+          row?.continuous_streak ??
           row?.totalStreak ??
           row?.total_streak ??
           row?.days ??
@@ -85,7 +93,13 @@ export function normalizeRanking(value) {
           row?.continuousDays ??
           0,
       ),
-      rank: Number(row?.rank ?? row?.ranking ?? row?.rankNumber ?? row?.rank_number ?? index + 1),
+      rank: Number(
+        row?.rank ??
+          row?.ranking ??
+          row?.rankNumber ??
+          row?.rank_number ??
+          index + 1,
+      ),
     }))
     .sort((a, b) => a.rank - b.rank);
 }

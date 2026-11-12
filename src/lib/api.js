@@ -1,4 +1,7 @@
-const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL ?? "").replace(/\/+$/, "");
+const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL ?? "").replace(
+  /\/+$/,
+  "",
+);
 export const getApiBaseUrl = () => apiBaseUrl;
 
 export class ApiError extends Error {
@@ -13,7 +16,9 @@ export class ApiError extends Error {
 /** Send a request to the configured backend. Paths should start with a slash. */
 export async function apiRequest(path, options = {}) {
   if (!apiBaseUrl) {
-    throw new Error("API 주소가 설정되지 않았습니다. 프로젝트 루트의 .env.local에 VITE_API_BASE_URL을 입력해 주세요.");
+    throw new Error(
+      "API 주소가 설정되지 않았습니다. 프로젝트 루트의 .env.local에 VITE_API_BASE_URL을 입력해 주세요.",
+    );
   }
 
   const { body, headers, token, ...requestOptions } = options;
@@ -27,12 +32,15 @@ export async function apiRequest(path, options = {}) {
     requestBody = JSON.stringify(body);
   }
 
-  const response = await fetch(`${apiBaseUrl}${path.startsWith("/") ? path : `/${path}`}`, {
-    ...requestOptions,
-    headers: requestHeaders,
-    body: requestBody,
-    credentials: requestOptions.credentials ?? "include",
-  });
+  const response = await fetch(
+    `${apiBaseUrl}${path.startsWith("/") ? path : `/${path}`}`,
+    {
+      ...requestOptions,
+      headers: requestHeaders,
+      body: requestBody,
+      credentials: requestOptions.credentials ?? "include",
+    },
+  );
 
   if (response.status === 204) return null;
 
@@ -42,9 +50,12 @@ export async function apiRequest(path, options = {}) {
     : await response.text();
 
   if (!response.ok) {
-    const message = typeof data === "string"
-      ? data || `요청에 실패했습니다. (${response.status})`
-      : data?.message || data?.error || `요청에 실패했습니다. (${response.status})`;
+    const message =
+      typeof data === "string"
+        ? data || `요청에 실패했습니다. (${response.status})`
+        : data?.message ||
+          data?.error ||
+          `요청에 실패했습니다. (${response.status})`;
     throw new ApiError(message, { status: response.status, data });
   }
 

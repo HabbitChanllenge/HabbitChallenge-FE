@@ -5,7 +5,8 @@ import BottomNav from "../components/BottomNav.jsx";
 import { userApi } from "../lib/endpoints.js";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,30}$/;
+const passwordPattern =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,30}$/;
 export default function Mypage({
   onNavigate,
   streak = 0,
@@ -61,9 +62,16 @@ export default function Mypage({
         ? "올바른 이메일 형식을 입력해주세요."
         : "",
     name: saveAttempted && !form.name.trim() ? "이름을 입력해주세요." : "",
-    currentPassword: saveAttempted && !currentPassword ? "현재 비밀번호를 입력해주세요." : "",
-    newPassword: saveAttempted && !passwordPattern.test(newPassword) ? "새 비밀번호 형식을 확인해주세요." : "",
-    confirmPassword: saveAttempted && newPassword !== confirmPassword ? "새 비밀번호가 일치하지 않습니다." : "",
+    currentPassword:
+      saveAttempted && !currentPassword ? "현재 비밀번호를 입력해주세요." : "",
+    newPassword:
+      saveAttempted && !passwordPattern.test(newPassword)
+        ? "새 비밀번호 형식을 확인해주세요."
+        : "",
+    confirmPassword:
+      saveAttempted && newPassword !== confirmPassword
+        ? "새 비밀번호가 일치하지 않습니다."
+        : "",
   };
   const deleteError =
     deleteAttempted && deletePassword.length < 8
@@ -71,16 +79,30 @@ export default function Mypage({
       : "";
   const save = async () => {
     setSaveAttempted(true);
-    if (!emailPattern.test(form.email) || !form.name.trim() || !currentPassword || !passwordPattern.test(newPassword) || newPassword !== confirmPassword) return;
+    if (
+      !emailPattern.test(form.email) ||
+      !form.name.trim() ||
+      !currentPassword ||
+      !passwordPattern.test(newPassword) ||
+      newPassword !== confirmPassword
+    )
+      return;
     setRequestError("");
     try {
       await userApi.updateMe(
-        { userId: form.name.trim(), email: form.email.trim(), currentPassword, newPassword },
+        {
+          userId: form.name.trim(),
+          email: form.email.trim(),
+          currentPassword,
+          newPassword,
+        },
         token,
       );
       setEditing(false);
       setSaved(true);
-      setCurrentPassword(""); setNewPassword(""); setConfirmPassword("");
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
     } catch (error) {
       setRequestError(error.message || "회원 정보를 수정하지 못했습니다.");
     }
@@ -88,7 +110,9 @@ export default function Mypage({
   const startEditing = () => {
     setSaved(false);
     setSaveAttempted(false);
-    setCurrentPassword(""); setNewPassword(""); setConfirmPassword("");
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
     setEditing(true);
   };
   const deleteAccount = async () => {
@@ -119,9 +143,7 @@ export default function Mypage({
         <span />
         <img src={logo} alt="새싹루틴" />
         <div className="streak-badge">
-          <b>{streak}일</b>
-          <small>연속 인증</small>
-        </div>
+          <b>{streak}일</b></div>
       </header>
       <main
         className={`profile-content ${editing ? "is-editing" : ""} ${saved ? "is-saved" : ""}`}
@@ -168,15 +190,61 @@ export default function Mypage({
         </section>
         {editing && (
           <section className="profile-info">
-            <label>현재 비밀번호<input type="password" value={currentPassword} onChange={(event) => setCurrentPassword(event.target.value)} autoComplete="current-password" />{errors.currentPassword && <small className="error-message">{errors.currentPassword}</small>}</label>
-            <label>새 비밀번호<input type="password" value={newPassword} onChange={(event) => setNewPassword(event.target.value)} autoComplete="new-password" />{errors.newPassword && <small className="error-message">{errors.newPassword}</small>}</label>
-            <label>새 비밀번호 확인<input type="password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} autoComplete="new-password" />{errors.confirmPassword && <small className="error-message">{errors.confirmPassword}</small>}</label>
+            <label>
+              현재 비밀번호
+              <input
+                type="password"
+                value={currentPassword}
+                onChange={(event) => setCurrentPassword(event.target.value)}
+                autoComplete="current-password"
+              />
+              {errors.currentPassword && (
+                <small className="error-message">
+                  {errors.currentPassword}
+                </small>
+              )}
+            </label>
+            <label>
+              새 비밀번호
+              <input
+                type="password"
+                value={newPassword}
+                onChange={(event) => setNewPassword(event.target.value)}
+                autoComplete="new-password"
+              />
+              {errors.newPassword && (
+                <small className="error-message">{errors.newPassword}</small>
+              )}
+            </label>
+            <label>
+              새 비밀번호 확인
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(event) => setConfirmPassword(event.target.value)}
+                autoComplete="new-password"
+              />
+              {errors.confirmPassword && (
+                <small className="error-message">
+                  {errors.confirmPassword}
+                </small>
+              )}
+            </label>
           </section>
         )}
-        {requestError && <p className="profile-save-error" role="alert">{requestError}</p>}
-        {saveAttempted && (errors.email || errors.name || errors.currentPassword || errors.newPassword || errors.confirmPassword) && (
-          <p className="profile-save-error">형식에 맞게 입력해주세요.</p>
+        {requestError && (
+          <p className="profile-save-error" role="alert">
+            {requestError}
+          </p>
         )}
+        {saveAttempted &&
+          (errors.email ||
+            errors.name ||
+            errors.currentPassword ||
+            errors.newPassword ||
+            errors.confirmPassword) && (
+            <p className="profile-save-error">형식에 맞게 입력해주세요.</p>
+          )}
         {saved && <p className="save-message">수정이 완료되었습니다.</p>}
         <div className="profile-actions">
           {editing ? (
@@ -239,9 +307,16 @@ export default function Mypage({
       )}
       {passwordAlert && (
         <div className="modal-backdrop password-alert-backdrop">
-          <section className="password-alert" role="alertdialog" aria-modal="true" aria-labelledby="password-alert-message">
+          <section
+            className="password-alert"
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="password-alert-message"
+          >
             <p id="password-alert-message">비밀번호를 확인해 주세요.</p>
-            <button type="button" onClick={() => setPasswordAlert(false)}>확인</button>
+            <button type="button" onClick={() => setPasswordAlert(false)}>
+              확인
+            </button>
           </section>
         </div>
       )}

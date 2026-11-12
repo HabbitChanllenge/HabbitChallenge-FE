@@ -19,20 +19,42 @@ function normalizeHabits(result) {
   if (!Array.isArray(rows)) return [];
 
   return rows.map((habit, index) => {
-    const isWeekly = String(habit.periodType ?? "").toLowerCase().includes("week");
-    const rawDays = habit.dayOfWeek ?? habit.verificationDays ?? habit.days ?? [];
-    const dayNames = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
-    const dayLabels = ["\uC6D4", "\uD654", "\uC218", "\uBAA9", "\uAE08", "\uD1A0", "\uC77C"];
+    const isWeekly = String(habit.periodType ?? "")
+      .toLowerCase()
+      .includes("week");
+    const rawDays =
+      habit.dayOfWeek ?? habit.verificationDays ?? habit.days ?? [];
+    const dayNames = [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+      "sunday",
+    ];
+    const dayLabels = [
+      "\uC6D4",
+      "\uD654",
+      "\uC218",
+      "\uBAA9",
+      "\uAE08",
+      "\uD1A0",
+      "\uC77C",
+    ];
     const verificationDays = rawDays.map((day) => {
       const value = String(day).toLowerCase();
-      const dayIndex = Number.isInteger(day) ? day - 1 : dayNames.indexOf(value);
+      const dayIndex = Number.isInteger(day)
+        ? day - 1
+        : dayNames.indexOf(value);
       return dayLabels[dayIndex] ?? day;
     });
     const targetCount = isWeekly
       ? verificationDays.length
       : Number(habit.totalRepeat ?? habit.verificationCount ?? 1);
     const completedCount = Number(
-      habit.completedCount ?? (habit.completed ? targetCount : habit.checks?.length ?? 0),
+      habit.completedCount ??
+        (habit.completed ? targetCount : (habit.checks?.length ?? 0)),
     );
     const checks = Array.isArray(habit.checks)
       ? habit.checks
@@ -49,7 +71,8 @@ function normalizeHabits(result) {
       ...habit,
       id: habit.id ?? habit.habitId ?? habit.habit_id ?? null,
       name: habit.name ?? habit.title ?? "",
-      frequency: habit.frequency ?? (isWeekly ? "\uC77C\uC8FC\uC77C" : "\uD558\uB8E8"),
+      frequency:
+        habit.frequency ?? (isWeekly ? "\uC77C\uC8FC\uC77C" : "\uD558\uB8E8"),
       category: categories[0] ?? "",
       checks,
       verificationDays,
@@ -146,11 +169,12 @@ export default function App() {
       setDataError("");
     } catch (error) {
       const responseCode = Number(error.data?.message);
-      const errorMessage = responseCode === 400
-        ? "인증 요청이 올바르지 않습니다."
-        : responseCode === 500
-          ? "서버 오류로 인증을 저장하지 못했습니다."
-          : error.message || "습관 인증을 저장하지 못했습니다.";
+      const errorMessage =
+        responseCode === 400
+          ? "인증 요청이 올바르지 않습니다."
+          : responseCode === 500
+            ? "서버 오류로 인증을 저장하지 못했습니다."
+            : error.message || "습관 인증을 저장하지 못했습니다.";
       setDataError(errorMessage);
       return;
     }
@@ -174,7 +198,10 @@ export default function App() {
   };
   const deleteHabit = async () => {
     try {
-      if (!hasSession) throw new Error("\uB85C\uADF8\uC778\uC774 \uD544\uC694\uD569\uB2C8\uB2E4.");
+      if (!hasSession)
+        throw new Error(
+          "\uB85C\uADF8\uC778\uC774 \uD544\uC694\uD569\uB2C8\uB2E4.",
+        );
       await habitApi.remove(editingHabitId, token);
       const refreshedHabits = normalizeHabits(await habitApi.list(token));
       setHabits(refreshedHabits);
@@ -182,12 +209,17 @@ export default function App() {
         (habit) => String(habit.id) === String(editingHabitId),
       );
       if (isStillListed) {
-        setDataError("\uC0AD\uC81C \uC751\uB2F5\uC740 \uC131\uACF5\uD588\uC9C0\uB9CC \uC2B5\uAD00 \uBAA9\uB85D\uC5D0 \uB0A8\uC544 \uC788\uC5B4\uC694. \uBC31\uC5D4\uB4DC \uC0AD\uC81C \uACBD\uB85C\uB97C \uD655\uC778\uD574\uC8FC\uC138\uC694.");
+        setDataError(
+          "\uC0AD\uC81C \uC751\uB2F5\uC740 \uC131\uACF5\uD588\uC9C0\uB9CC \uC2B5\uAD00 \uBAA9\uB85D\uC5D0 \uB0A8\uC544 \uC788\uC5B4\uC694. \uBC31\uC5D4\uB4DC \uC0AD\uC81C \uACBD\uB85C\uB97C \uD655\uC778\uD574\uC8FC\uC138\uC694.",
+        );
         return;
       }
       setDataError("");
     } catch (error) {
-      setDataError(error.message || "\uC2B5\uAD00\uC744 \uC0AD\uC81C\uD558\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4.");
+      setDataError(
+        error.message ||
+          "\uC2B5\uAD00\uC744 \uC0AD\uC81C\uD558\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4.",
+      );
       return;
     }
     setEditingHabitId(null);

@@ -47,7 +47,9 @@ export default function Login({ onSignup, onLogin, onForgotPassword }) {
     } catch (error) {
       if (loginAccepted) {
         setCredentialsRejected(false);
-        setRequestError("로그인 응답에서 인증 세션을 확인하지 못했습니다. 백엔드 로그인 응답의 토큰 또는 쿠키 설정을 확인해 주세요.");
+        setRequestError(
+          "로그인 응답에서 인증 세션을 확인하지 못했습니다. 백엔드 로그인 응답의 토큰 또는 쿠키 설정을 확인해 주세요.",
+        );
       } else if (error.status === 401) {
         setCredentialsRejected(true);
         setRequestError("이메일 또는 비밀번호를 확인해 주세요.");
@@ -55,7 +57,9 @@ export default function Login({ onSignup, onLogin, onForgotPassword }) {
         setCredentialsRejected(false);
         setRequestError(error.message || "로그인에 실패했습니다.");
       }
-    } finally { setLoading(false); }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -68,7 +72,11 @@ export default function Login({ onSignup, onLogin, onForgotPassword }) {
             className={emailError || credentialsRejected ? "has-error" : ""}
             type="email"
             value={email}
-            onChange={(event) => { setEmail(event.target.value); setCredentialsRejected(false); setRequestError(""); }}
+            onChange={(event) => {
+              setEmail(event.target.value);
+              setCredentialsRejected(false);
+              setRequestError("");
+            }}
             placeholder="이메일을 입력해 주세요."
             autoComplete="email"
           />
@@ -80,7 +88,11 @@ export default function Login({ onSignup, onLogin, onForgotPassword }) {
             className={passwordError || credentialsRejected ? "has-error" : ""}
             type="password"
             value={password}
-            onChange={(event) => { setPassword(event.target.value); setCredentialsRejected(false); setRequestError(""); }}
+            onChange={(event) => {
+              setPassword(event.target.value);
+              setCredentialsRejected(false);
+              setRequestError("");
+            }}
             placeholder="비밀번호를 입력해 주세요."
             autoComplete="current-password"
           />
@@ -99,7 +111,11 @@ export default function Login({ onSignup, onLogin, onForgotPassword }) {
         </label>
       </div>
       <div className="form-bottom">
-        {requestError && <p className="error-message" role="alert">{requestError}</p>}
+        {requestError && (
+          <p className="error-message" role="alert">
+            {requestError}
+          </p>
+        )}
         <p>
           아직 계정이 없으시다면?{" "}
           <button type="button" className="text-button" onClick={onSignup}>
