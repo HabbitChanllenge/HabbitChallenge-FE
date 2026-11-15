@@ -594,8 +594,8 @@ input:focus {
   cursor: pointer;
 }
 .bottom-nav svg {
-  width: 34px;
-  height: 34px;
+  width: 28px;
+  height: 28px;
   fill: none;
   stroke: currentColor;
   stroke-width: 2.2;
