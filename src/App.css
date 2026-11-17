@@ -1791,15 +1791,18 @@ input:focus {
   .habit-list-scroll { grid-template-columns: repeat(2, minmax(280px, 1fr)); gap: 16px; overflow: visible; }
   .ranking-page { margin: 0 auto; }
   .ranking-caption { margin: 8px 0 30px; font-size: 14px; }
-  .ranking-podium { max-width: 700px; margin: 54px auto 36px; gap: 18px; }
-  .podium-user { min-height: 130px; }
-  .podium-user.first { min-height: 180px; }
-  .podium-user.first .trophy-icon { top: 28px; width: 96px; height: 96px; }
-  .podium-user b { top: -34px; font-size: 14px; }
-  .podium-user span { top: -17px; font-size: 13px; }
-  .ranking-list { max-width: 800px; margin: 0 auto; gap: 10px; }
-  .ranking-list div { min-height: 64px; font-size: 15px; }
-  .ranking-list b, .ranking-list strong { font-size: 15px; }
+  .ranking-podium { width: 100%; max-width: none; min-height: 430px; margin: 64px auto 52px; gap: 28px; padding: 0; }
+  .podium-user { min-height: 270px; border-radius: 20px 20px 12px 12px; padding: 20px; }
+  .podium-user.first { min-height: 390px; }
+  .podium-user.second { min-height: 320px; }
+  .podium-user.third { min-height: 270px; }
+  .podium-user.first .trophy-icon { top: 34px; width: 190px; height: 244px; }
+  .podium-user.first i { margin-top: 280px; font-size: 30px; }
+  .podium-user b { top: -40px; font-size: 17px; }
+  .podium-user span { top: -18px; font-size: 15px; }
+  .ranking-list { width: 100%; max-width: none; margin: 0 auto; gap: 12px; }
+  .ranking-list div { min-height: 76px; font-size: 17px; }
+  .ranking-list b, .ranking-list strong { font-size: 17px; }
   .profile-content { max-width: 900px; }
   .mypage-page .profile-content { max-width: 900px; }
   .profile-hero { justify-content: flex-start; margin: 0 0 28px; }

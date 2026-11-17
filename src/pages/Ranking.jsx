@@ -1,5 +1,5 @@
 import logo from "../assets/logo.svg";
-import firstPlaceTrophy from "../assets/first-place-trophy.svg";
+import firstPlaceTrophy from "../assets/ranking.svg";
 import BottomNav from "../components/BottomNav.jsx";
 import { useRanking } from "../lib/ranking.js";
 
