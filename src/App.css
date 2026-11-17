@@ -1711,12 +1711,11 @@ input:focus {
   .bottom-nav::before {
     position: absolute;
     top: 36px;
-    left: 32px;
-    color: #456c09;
-    content: "새싹루틴";
-    font-size: 21px;
-    font-weight: 850;
-    letter-spacing: -1px;
+    left: 24px;
+    width: 184px;
+    height: 50px;
+    background: url("./assets/logo.svg") center / contain no-repeat;
+    content: "";
   }
   .bottom-nav button {
     display: flex;
