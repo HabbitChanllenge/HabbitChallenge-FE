@@ -1639,6 +1639,7 @@ input:focus {
     background: transparent;
     box-shadow: none;
   }
+  .phone-frame.home-mode { min-height: 100vh; }
   .home-indicator { display: none; }
   .home-page,
   .sub-page {
@@ -1647,7 +1648,14 @@ input:focus {
     padding: 36px 5vw 64px calc(260px + 5vw);
     overflow: visible;
   }
+  .home-page {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(320px, .85fr);
+    align-content: start;
+    column-gap: 24px;
+  }
   .home-header {
+    grid-column: 1 / -1;
     height: 76px;
     grid-template-columns: 1fr auto;
     margin-bottom: 34px;
@@ -1659,7 +1667,8 @@ input:focus {
   .home-header small { font-size: 11px; }
   .home-page > .habit-section,
   .home-page > .ranking-section {
-    width: min(100%, 1100px);
+    width: 100%;
+    max-width: 1320px;
     padding: 24px;
     margin-bottom: 24px;
     border: 1px solid #e9eddf;
@@ -1694,10 +1703,20 @@ input:focus {
     flex-direction: column;
     justify-content: flex-start;
     gap: 8px;
-    padding: 120px 16px 24px;
+    padding: 116px 16px 24px;
     border-top: 0;
     border-right: 1px solid #e6eadf;
     background: #fff;
+  }
+  .bottom-nav::before {
+    position: absolute;
+    top: 36px;
+    left: 32px;
+    color: #456c09;
+    content: "새싹루틴";
+    font-size: 21px;
+    font-weight: 850;
+    letter-spacing: -1px;
   }
   .bottom-nav button {
     display: flex;
@@ -1777,4 +1796,78 @@ input:focus {
   input { padding: 14px; font-size: 15px; }
   .primary-button { padding: 14px; font-size: 15px; }
   .auth-notice { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); }
+}
+
+@media (min-width: 900px) and (hover: hover) {
+  .bottom-nav button,
+  .habit-card,
+  .home-page > .habit-section,
+  .home-page > .ranking-section,
+  .ranking-list div,
+  .choice-row button,
+  .choice-grid button,
+  .habit-choice-grid button,
+  .primary-button,
+  .habit-title button {
+    transition: transform .18s ease, box-shadow .18s ease, background-color .18s ease, color .18s ease;
+  }
+  .bottom-nav button:hover {
+    transform: translateX(3px);
+    background: #f5f9ea;
+    color: #4f8100;
+  }
+  .habit-card:hover,
+  .home-page > .habit-section:hover,
+  .home-page > .ranking-section:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 32px rgba(48, 64, 20, .09);
+  }
+  .habit-actions button:hover,
+  .primary-button:hover,
+  .empty-state button:hover,
+  .habit-title button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 16px rgba(90, 133, 12, .2);
+    filter: brightness(.97);
+  }
+  .ranking-list div:hover { transform: translateX(4px); box-shadow: 0 6px 16px rgba(48, 64, 20, .08); }
+  .choice-row button:hover,
+  .choice-grid button:hover,
+  .habit-choice-grid button:hover { background: #e2f6b5; color: #4f7600; }
+  button:focus-visible,
+  input:focus-visible { outline: 3px solid #91c927; outline-offset: 3px; }
+}
+
+@media (min-width: 900px) {
+  .mypage-page .profile-content {
+    gap: 28px;
+    padding: 34px 38px 38px;
+    border: 1px solid #e8eddf;
+    border-radius: 22px;
+    background: #fff;
+    box-shadow: 0 10px 30px rgba(48, 64, 20, .05);
+  }
+  .mypage-page .profile-hero {
+    gap: 24px;
+    margin: 0;
+    padding-bottom: 26px;
+    border-bottom: 1px solid #edf0e8;
+  }
+  .mypage-page .profile-info {
+    gap: 22px;
+    max-width: 100%;
+  }
+  .mypage-page .profile-info h2 { margin-bottom: 2px; font-size: 19px; }
+  .mypage-page .profile-info label { gap: 10px; }
+  .mypage-page .profile-info input { min-height: 48px; border-radius: 10px; }
+  .mypage-page .profile-password-link { margin-top: -6px; }
+  .mypage-page .profile-actions { margin-top: 4px; }
+  .mypage-page .profile-actions .primary-button { max-width: 280px; border-radius: 12px; }
+  .mypage-page .profile-delete-account { align-self: flex-start; margin: 0; }
+  .mypage-page .profile-content.is-editing .profile-hero {
+    justify-content: flex-start;
+    margin: 0;
+    padding-bottom: 20px;
+  }
+  .mypage-page .profile-content.is-editing .profile-actions { margin-top: 4px; }
 }
