@@ -1819,8 +1819,8 @@ input:focus {
   .habit-card:hover,
   .home-page > .habit-section:hover,
   .home-page > .ranking-section:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 14px 32px rgba(48, 64, 20, .09);
+    transform: none;
+    box-shadow: inset 0 0 0 2px rgba(129, 180, 25, .28), 0 5px 14px rgba(48, 64, 20, .06);
   }
   .habit-actions button:hover,
   .primary-button:hover,
