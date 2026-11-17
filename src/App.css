@@ -1534,6 +1534,17 @@ input:focus {
   gap: 5px;
   margin: 27px 18px 0;
 }
+.home-ranking-empty {
+  display: grid;
+  min-height: 160px;
+  place-content: center;
+  justify-items: center;
+  gap: 8px;
+  color: #8b9674;
+  text-align: center;
+}
+.home-ranking-empty span { font-size: 34px; opacity: .55; }
+.home-ranking-empty p { margin: 0; font-size: 13px; }
 .home-podium-user {
   position: relative;
   min-height: 57px;
@@ -1699,11 +1710,13 @@ input:focus {
   .empty-state p { font-size: 16px; }
   .empty-state button { padding: 11px 18px; font-size: 13px; }
   .home-ranking-podium { max-width: 620px; margin: 56px auto 0; gap: 16px; }
+  .home-ranking-empty { min-height: 220px; }
+  .home-ranking-empty p { font-size: 15px; }
   .home-podium-user { min-height: 120px; border-radius: 16px 16px 8px 8px; }
   .home-podium-user.first { min-height: 170px; }
   .home-podium-user b { top: -34px; font-size: 14px; }
   .home-podium-user span { top: -16px; font-size: 12px; }
-  .home-podium-user em { top: 34px; font-size: 44px; }
+  .home-podium-user em { top: 38px; font-size: 34px; line-height: 1; }
   .bottom-nav,
   .sub-page .bottom-nav {
     position: fixed;

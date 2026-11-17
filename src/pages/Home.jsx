@@ -69,7 +69,7 @@ export default function Home({
   }, []);
   const showHabitsSkeleton = habitsUnavailable || habitsLoading;
   const showRankingSkeleton =
-    !online || Boolean(rankingError) || rankingLoading || rankings.length === 0;
+    !online || Boolean(rankingError) || rankingLoading;
   const streak = Math.max(0, ...habits.map((habit) => habit.streak ?? 0));
   return (
     <div className="home-page">
@@ -123,6 +123,11 @@ export default function Home({
             </span>
             <SkeletonRanking />
           </>
+        ) : rankings.length === 0 ? (
+          <div className="home-ranking-empty" role="status">
+            <span aria-hidden="true">🏆</span>
+            <p>아직 랭킹 정보가 없어요</p>
+          </div>
         ) : (
           <div className="home-ranking-podium">
             {rankings[1] && (
