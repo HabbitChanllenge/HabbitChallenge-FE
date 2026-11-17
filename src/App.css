@@ -708,7 +708,7 @@ input:focus {
   text-align: center;
 }
 .modal-backdrop {
-  position: absolute;
+  position: fixed;
   inset: 0;
   z-index: 3;
   display: grid;
@@ -717,7 +717,8 @@ input:focus {
   background: rgba(0, 0, 0, 0.42);
 }
 .confirm-modal {
-  width: 100%;
+  width: min(100%, 420px);
+  box-sizing: border-box;
   border-radius: 10px;
   padding: 22px 18px;
   background: white;
