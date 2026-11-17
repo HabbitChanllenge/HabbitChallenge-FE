@@ -1580,7 +1580,7 @@ input:focus {
 .home-podium-user b { top: -23px; }
 .home-podium-user span { top: -12px; color: #5e8800; }
 .home-podium-user em { position: absolute; top: 17px; left: 50%; transform: translateX(-50%); font-size: 31px; font-style: normal; }
-.home-podium-user .trophy-icon { position: absolute; top: 17px; left: 50%; width: 42px; height: 42px; transform: translateX(-50%); fill: #f5b400; }
+.home-podium-user .trophy-icon { position: absolute; top: 17px; left: 50%; width: 42px; height: 42px; transform: translateX(-50%); object-fit: contain; }
 
 .ranking-screen .ranking-page { overflow-y: auto; padding: 82px 4px 16px; }
 .ranking-page h1 { font-size: 21px; }
@@ -1592,7 +1592,7 @@ input:focus {
 .podium-user i { align-self: end; font-style: normal; font-size: 19px; font-weight: 900; }
 .podium-user.first { min-height: 100px; background: #c4ec47; }
 .podium-user.first em { position: absolute; top: 18px; font-size: 31px; font-style: normal; }
-.podium-user.first .trophy-icon { position: absolute; top: 18px; left: 50%; width: 48px; height: 48px; transform: translateX(-50%); fill: #f5b400; }
+.podium-user.first .trophy-icon { position: absolute; top: 18px; left: 50%; width: 48px; height: 48px; transform: translateX(-50%); object-fit: contain; }
 .podium-user.first i { margin-top: 46px; color: #6c9204; }
 .podium-user.second { background: #96d40a; }
 .podium-user.third { background: #6eaa00; }
@@ -1731,7 +1731,7 @@ input:focus {
   .home-podium-user.first { min-height: 170px; }
   .home-podium-user b { top: -34px; font-size: 14px; }
   .home-podium-user span { top: -16px; font-size: 12px; }
-  .home-podium-user .trophy-icon { top: 38px; width: 82px; height: 82px; }
+  .home-podium-user .trophy-icon { top: 38px; width: 96px; height: 96px; }
   .bottom-nav,
   .sub-page .bottom-nav {
     position: fixed;
@@ -1783,14 +1783,18 @@ input:focus {
   .habit-title { margin: 0 0 24px; }
   .habit-title h1, .habit-title h2, .ranking-page h1 { font-size: 30px; }
   .habit-title button { width: 42px; height: 42px; font-size: 28px; }
-  .today-habit-summary { margin-bottom: 24px; padding: 24px; border-radius: 16px; }
+  .today-habit-summary { gap: 16px; margin-bottom: 28px; padding: 28px 32px; border-radius: 16px; }
+  .today-habit-summary h1 { font-size: 20px; }
+  .today-habit-summary b { font-size: 18px; }
+  .today-progress { height: 42px; border-radius: 11px; }
+  .today-progress span { font-size: 15px; }
   .habit-list-scroll { grid-template-columns: repeat(2, minmax(280px, 1fr)); gap: 16px; overflow: visible; }
   .ranking-page { margin: 0 auto; }
   .ranking-caption { margin: 8px 0 30px; font-size: 14px; }
   .ranking-podium { max-width: 700px; margin: 54px auto 36px; gap: 18px; }
   .podium-user { min-height: 130px; }
   .podium-user.first { min-height: 180px; }
-  .podium-user.first .trophy-icon { top: 28px; width: 76px; height: 76px; }
+  .podium-user.first .trophy-icon { top: 28px; width: 96px; height: 96px; }
   .podium-user b { top: -34px; font-size: 14px; }
   .podium-user span { top: -17px; font-size: 13px; }
   .ranking-list { max-width: 800px; margin: 0 auto; gap: 10px; }
@@ -1905,14 +1909,13 @@ input:focus {
   .workspace-heading .streak-badge {
     display: flex;
     align-items: baseline;
-    gap: 8px;
     min-width: 0;
-    padding: 10px 14px;
-    border-radius: 9px;
-    background: #f0f6e4;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
   }
-  .workspace-heading .streak-badge b { color: #527b13; font-size: 15px; }
-  .workspace-heading .streak-badge small { color: #7c866b; font-size: 12px; }
+  .workspace-heading .streak-badge b { color: #527b13; font-size: 18px; }
+  .workspace-heading .streak-badge small { display: none; }
   .workspace-action {
     width: 38px;
     height: 38px;

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import logo from "../assets/logo.svg";
+import firstPlaceTrophy from "../assets/first-place-trophy.svg";
 import BottomNav from "../components/BottomNav.jsx";
 import HabitCard from "../components/HabitCard.jsx";
 import { useRanking } from "../lib/ranking.js";
@@ -34,7 +35,7 @@ function SkeletonRanking() {
       <div className="home-ranking-podium">
         <div className="home-podium-user second" />
         <div className="home-podium-user first">
-          <svg className="trophy-icon" viewBox="0 0 128 128" aria-hidden="true"><path d="M42 14h44c10 0 16 8 16 18v10c0 24-15 39-32 44v12h18c8 0 14 6 14 14v7H26v-7c0-8 6-14 14-14h18V86C41 81 26 66 26 42V32c0-10 6-18 16-18zm-2 16H14v10c0 14 8 24 21 29-4-9-6-20-6-33V30zm48 0v6c0 13-2 24-6 33 13-5 21-15 21-29V30H88z" /></svg>
+          <img className="trophy-icon" src={firstPlaceTrophy} alt="" />
         </div>
         <div className="home-podium-user third" />
       </div>
@@ -144,7 +145,7 @@ export default function Home({
               <div className="home-podium-user first">
                 <b>{rankings[0].name}</b>
                 <span>{rankings[0].days}일</span>
-                <svg className="trophy-icon" viewBox="0 0 128 128" aria-hidden="true"><path d="M42 14h44c10 0 16 8 16 18v10c0 24-15 39-32 44v12h18c8 0 14 6 14 14v7H26v-7c0-8 6-14 14-14h18V86C41 81 26 66 26 42V32c0-10 6-18 16-18zm-2 16H14v10c0 14 8 24 21 29-4-9-6-20-6-33V30zm48 0v6c0 13-2 24-6 33 13-5 21-15 21-29V30H88z" /></svg>
+                <img className="trophy-icon" src={firstPlaceTrophy} alt="" />
               </div>
             )}
             {rankings[2] && (
