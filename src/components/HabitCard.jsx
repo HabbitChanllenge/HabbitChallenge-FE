@@ -35,7 +35,10 @@ export default function HabitCard({ habit, onEdit, onToggleCheck }) {
         >
           수정
         </button>
-        <button type="button">연속 성공 {habit.streak ?? 0}일</button>
+        <button type="button" className="habit-streak-button">
+          <span>연속 성공</span>
+          <strong>{habit.streak ?? 0}일</strong>
+        </button>
       </div>
       {showChecks && (
         <div
