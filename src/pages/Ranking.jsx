@@ -14,9 +14,9 @@ export default function Ranking({ onNavigate, token, streak = 0 }) {
       <div className="workspace-heading"><h1>랭킹</h1><div className="streak-badge"><b>{streak}일</b><small>연속 일수</small></div></div>
       <main className="ranking-page">
         <section className="ranking-podium">
-          <div className="podium-user second">{second && <><b>{second.name}</b><span>{second.days}일</span></>}<i>{second?.rank ?? ""}</i></div>
-          <div className="podium-user first">{first && <><b>{first.name}</b><span>{first.days}일</span></>}<img className="trophy-icon" src={firstPlaceTrophy} alt="" /><i>{first?.rank ?? ""}</i></div>
-          <div className="podium-user third">{third && <><b>{third.name}</b><span>{third.days}일</span></>}<i>{third?.rank ?? ""}</i></div>
+          <div className="podium-user second">{second && <><b>{second.name}</b><span>{second.days}일</span></>}</div>
+          <div className="podium-user first">{first && <><b>{first.name}</b><span>{first.days}일</span></>}<img className="trophy-icon" src={firstPlaceTrophy} alt="" /></div>
+          <div className="podium-user third">{third && <><b>{third.name}</b><span>{third.days}일</span></>}</div>
         </section>
         {message && <p className="ranking-state-message" role={error ? "alert" : "status"}>{message}</p>}
         {rest.length > 0 && <section className="ranking-list">{rest.map((user) => <div key={user.id}><span>{user.rank}</span><b>{user.name}</b><strong>{user.days}일</strong></div>)}</section>}

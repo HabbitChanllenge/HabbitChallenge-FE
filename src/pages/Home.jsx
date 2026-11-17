@@ -72,6 +72,21 @@ export default function Home({
   const showRankingSkeleton =
     !online || Boolean(rankingError) || rankingLoading;
   const streak = Math.max(0, ...habits.map((habit) => habit.streak ?? 0));
+  const dailyTarget = habits.reduce(
+    (total, habit) => total + Math.max(0, Number(habit.verificationCount ?? 0)),
+    0,
+  );
+  const dailyCompleted = habits.reduce(
+    (total, habit) =>
+      total + Math.min(
+        Math.max(0, Number(habit.completedCount ?? habit.checks?.length ?? 0)),
+        Math.max(0, Number(habit.verificationCount ?? 0)),
+      ),
+    0,
+  );
+  const dailyProgress = dailyTarget
+    ? Math.min(100, (dailyCompleted / dailyTarget) * 100)
+    : 0;
   return (
     <div className="home-page">
       <header className="home-header">
@@ -85,6 +100,19 @@ export default function Home({
         <h1>홈</h1>
         <div className="streak-badge"><b>{streak}일</b><small>연속 일수</small></div>
       </div>
+      <section className="home-progress-card" aria-label="오늘의 습관 달성">
+        <strong>오늘의 습관 달성</strong>
+        <div
+          className="home-progress-track"
+          role="progressbar"
+          aria-valuemin={0}
+          aria-valuemax={dailyTarget}
+          aria-valuenow={dailyCompleted}
+        >
+          <i style={{ width: `${dailyProgress}%` }} />
+        </div>
+        <b>{dailyCompleted}/{dailyTarget}</b>
+      </section>
       <section className="habit-section">
         <div className="section-heading">
           <span>습관</span>
