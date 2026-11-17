@@ -607,9 +607,10 @@ input:focus {
   line-height: 1;
 }
 .bottom-nav .nav-icon-image {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   object-fit: contain;
+  mix-blend-mode: multiply;
 }
 .bottom-nav small {
   font-size: 13px;
@@ -1789,7 +1790,7 @@ input:focus {
     font-size: 15px;
   }
   .bottom-nav svg { width: 22px; height: 22px; }
-  .bottom-nav .nav-icon-image { width: 22px; height: 22px; }
+  .bottom-nav .nav-icon-image { width: 24px; height: 24px; }
   .bottom-nav small { font-size: 15px; }
   .bottom-nav .active { background: #f1f8df; }
   .sub-page { overflow: visible; }
@@ -1816,21 +1817,22 @@ input:focus {
   .ranking-page { margin: 0 auto; }
   .ranking-caption { margin: 8px 0 30px; font-size: 14px; }
   .ranking-podium {
-    width: 100%;
-    max-width: 840px;
-    min-height: 300px;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: min(100%, 820px);
+    min-height: 320px;
     margin: 62px auto 44px;
     gap: 26px;
     padding: 0;
   }
-  .podium-user { min-height: 205px; border-radius: 18px 18px 12px 12px; padding: 16px; }
-  .podium-user.first { min-height: 260px; background: transparent; }
+  .podium-user { flex: 1 1 0; width: 0; min-width: 0; box-sizing: border-box; min-height: 205px; border-radius: 18px 18px 12px 12px; padding: 16px; }
+  .podium-user.first { min-height: 320px; background: transparent; }
   .podium-user.second { min-height: 220px; }
   .podium-user.third { min-height: 190px; }
   .podium-user.first .trophy-icon { inset: 0; width: 100%; height: 100%; object-fit: contain; }
-  .podium-user b { top: -58px; font-size: 22px; line-height: 1.15; }
-  .podium-user span { top: -30px; font-size: 19px; line-height: 1.15; }
+  .podium-user b { top: -62px; width: 140%; font-size: 25px; line-height: 1.15; }
+  .podium-user span { top: -31px; font-size: 22px; line-height: 1.15; }
   .ranking-list { width: 100%; max-width: 1080px; margin: 0 auto; gap: 10px; }
   .ranking-list div { min-height: 72px; font-size: 18px; }
   .ranking-list b, .ranking-list strong { font-size: 18px; }
