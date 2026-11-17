@@ -10,6 +10,7 @@ export default function Ranking({ onNavigate, token, streak = 0 }) {
   return (
     <div className="sub-page ranking-screen">
       <header className="home-header"><span /><img src={logo} alt="새싹 루틴" /><div className="streak-badge"><b>{streak}일</b></div></header>
+      <div className="workspace-heading"><h1>랭킹</h1></div>
       <main className="ranking-page">
         <section className="ranking-podium">
           <div className="podium-user second">{second && <><b>{second.name}</b><span>{second.days}일</span></>}<i>{second?.rank ?? ""}</i></div>

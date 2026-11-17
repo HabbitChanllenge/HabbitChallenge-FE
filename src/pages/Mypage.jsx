@@ -146,6 +146,9 @@ export default function Mypage({
           <b>{streak}일</b>
         </div>
       </header>
+      <div className="workspace-heading">
+        <h1>마이페이지</h1>
+      </div>
       <main
         className={`profile-content ${editing ? "is-editing" : ""} ${saved ? "is-saved" : ""}`}
       >

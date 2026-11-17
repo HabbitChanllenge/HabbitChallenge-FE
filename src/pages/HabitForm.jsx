@@ -93,6 +93,9 @@ export default function HabitForm({
         <img src={logo} alt="새싹루틴" />
         <span />
       </header>
+      <div className="workspace-heading">
+        <h1>{mode === "edit" ? "습관 수정" : "습관 만들기"}</h1>
+      </div>
       <form className="habit-editor" onSubmit={submit} noValidate>
         {mode === "edit" && <h1>습관 수정</h1>}
         <label className="editor-label">

@@ -1674,6 +1674,7 @@ input:focus {
   }
   .home-header > span { display: none; }
   .home-header img { width: 142px; justify-self: start; }
+  .home-page > .home-header img { display: none; }
   .home-header b { font-size: 20px; }
   .home-header small { font-size: 11px; }
   .home-page > .habit-section,
@@ -1864,6 +1865,29 @@ input:focus {
 }
 
 @media (min-width: 900px) {
+  .workspace-heading {
+    width: min(100%, 1320px);
+    margin: 4px auto 28px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid #e3e8dc;
+  }
+  .workspace-heading h1 {
+    margin: 0;
+    color: #28311f;
+    font-size: 30px;
+    font-weight: 750;
+    letter-spacing: -1px;
+  }
+  .home-page > .workspace-heading { align-self: stretch; }
+  .sub-page > .workspace-heading { flex: none; }
+  .habit-page-content,
+  .ranking-page,
+  .mypage-page .profile-content { max-width: 1320px; }
+  .mypage-page .profile-content { max-width: 1080px; }
+  .habit-page-content { padding-top: 0; }
+  .habit-page-content .habit-title { margin-top: 0; }
+  .mypage-page .profile-content { margin-top: 0; }
+  .ranking-page { max-width: 1320px; }
   .mypage-page .profile-content {
     gap: 28px;
     padding: 34px 38px 38px;

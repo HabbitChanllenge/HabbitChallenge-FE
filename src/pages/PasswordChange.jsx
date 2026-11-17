@@ -92,6 +92,7 @@ export default function PasswordChange({ token, onComplete, onNavigate }) {
   };
   return (
     <div className="sub-page password-change-page">
+      <div className="workspace-heading"><h1>비밀번호 변경</h1></div>
       <form className="password-change-form" onSubmit={submit} noValidate>
         <h1>비밀번호 변경</h1>
         <div className="password-change-fields">

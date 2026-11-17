@@ -80,6 +80,9 @@ export default function Home({
           <b>{streak}일</b>
         </div>
       </header>
+      <div className="workspace-heading">
+        <h1>홈</h1>
+      </div>
       <section className="habit-section">
         <div className="section-heading">
           <span>습관</span>
