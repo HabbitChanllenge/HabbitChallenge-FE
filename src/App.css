@@ -1185,7 +1185,7 @@ input:focus {
 }
 .habit-card.is-in-progress,
 .home-page .habit-card.is-in-progress {
-  background: #edf8c8;
+  background: #ececec;
 }
 .habit-card.is-complete,
 .home-page .habit-card.is-complete {
