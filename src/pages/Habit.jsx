@@ -6,6 +6,7 @@ import HabitCard from "../components/HabitCard.jsx";
 export default function Habit({
   onNavigate,
   habits,
+  streak = 0,
   onToggleCheck,
   onEdit,
   notice,
@@ -21,7 +22,6 @@ export default function Habit({
   );
   const completed = habits.reduce((sum, habit) => sum + habit.checks.length, 0);
   const progress = target ? Math.min(100, (completed / target) * 100) : 0;
-  const streak = Math.max(0, ...habits.map((habit) => habit.streak ?? 0));
   useEffect(() => {
     if (!notice) return undefined;
     const timer = window.setTimeout(onClearNotice, 1200);

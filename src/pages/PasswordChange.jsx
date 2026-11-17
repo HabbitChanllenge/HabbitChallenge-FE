@@ -33,7 +33,7 @@ function PasswordField({ label, value, onChange, error, placeholder }) {
   );
 }
 
-export default function PasswordChange({ token, onComplete, onNavigate }) {
+export default function PasswordChange({ token, onComplete, onNavigate, streak = 0 }) {
   const [current, setCurrent] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -92,7 +92,7 @@ export default function PasswordChange({ token, onComplete, onNavigate }) {
   };
   return (
     <div className="sub-page password-change-page">
-      <div className="workspace-heading"><h1>비밀번호 변경</h1></div>
+      <div className="workspace-heading"><h1>비밀번호 변경</h1><div className="streak-badge"><b>{streak}일</b></div></div>
       <form className="password-change-form" onSubmit={submit} noValidate>
         <h1>비밀번호 변경</h1>
         <div className="password-change-fields">

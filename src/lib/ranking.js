@@ -57,6 +57,19 @@ export function normalizeRanking(value) {
   if (!Array.isArray(rows)) return [];
   return rows
     .map((row, index) => ({
+      identities: [
+        row?.id,
+        row?.userId,
+        row?.user_id,
+        row?.userName,
+        row?.user_name,
+        row?.username,
+        row?.name,
+        row?.nickname,
+        row?.memberName,
+        row?.member_name,
+        row?.email,
+      ].filter((value) => value != null).map((value) => String(value).trim().toLowerCase()),
       id:
         row?.id ??
         row?.userId ??
@@ -102,6 +115,25 @@ export function normalizeRanking(value) {
       ),
     }))
     .sort((a, b) => a.rank - b.rank);
+}
+
+export function currentUserStreak(rankedUsers, profile) {
+  const currentIds = [
+    profile?.id,
+    profile?.userId,
+    profile?.user_id,
+    profile?.userName,
+    profile?.user_name,
+    profile?.username,
+    profile?.name,
+    profile?.email,
+  ]
+    .filter((value) => value != null)
+    .map((value) => String(value).trim().toLowerCase());
+  const current = rankedUsers.find((user) =>
+    user.identities.some((identity) => currentIds.includes(identity)),
+  );
+  return current ? current.days : null;
 }
 
 export function useRanking(token) {

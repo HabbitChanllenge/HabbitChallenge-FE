@@ -46,6 +46,7 @@ function SkeletonRanking() {
 export default function Home({
   onNavigate,
   habits,
+  streak = 0,
   onToggleCheck,
   onEdit,
   token,
@@ -71,7 +72,6 @@ export default function Home({
   const showHabitsSkeleton = habitsUnavailable || habitsLoading;
   const showRankingSkeleton =
     !online || Boolean(rankingError) || rankingLoading;
-  const streak = Math.max(0, ...habits.map((habit) => habit.streak ?? 0));
   const dailyTarget = habits.reduce(
     (total, habit) => total + Math.max(0, Number(habit.verificationCount ?? 0)),
     0,

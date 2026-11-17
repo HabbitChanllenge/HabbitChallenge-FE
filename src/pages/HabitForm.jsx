@@ -18,6 +18,7 @@ const counts = Array.from({ length: 9 }, (_, index) => index + 1);
 export default function HabitForm({
   mode,
   habit,
+  streak = 0,
   onNavigate,
   onSave,
   onDelete,
@@ -95,6 +96,7 @@ export default function HabitForm({
       </header>
       <div className="workspace-heading">
         <h1>{mode === "edit" ? "습관 수정" : "습관 만들기"}</h1>
+        <div className="streak-badge"><b>{streak}일</b></div>
       </div>
       <form className="habit-editor" onSubmit={submit} noValidate>
         {mode === "edit" && <h1>습관 수정</h1>}

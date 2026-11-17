@@ -10,7 +10,8 @@ import Login from "./pages/Login.jsx";
 import SignupPage from "./pages/Signup.jsx";
 import PasswordRecovery from "./pages/PasswordRecovery.jsx";
 import PasswordChange from "./pages/PasswordChange.jsx";
-import { authApi, habitApi } from "./lib/endpoints.js";
+import { authApi, habitApi, streakApi, userApi } from "./lib/endpoints.js";
+import { currentUserStreak, normalizeRanking } from "./lib/ranking.js";
 
 function normalizeHabits(result) {
   const rows = Array.isArray(result)
@@ -100,6 +101,8 @@ export default function App() {
   const [habitsLoading, setHabitsLoading] = useState(false);
   const [habitsUnavailable, setHabitsUnavailable] = useState(false);
   const [networkRevision, setNetworkRevision] = useState(0);
+  const [streakRevision, setStreakRevision] = useState(0);
+  const [currentStreak, setCurrentStreak] = useState(0);
 
   useEffect(() => {
     const retryWhenOnline = () =>
@@ -133,6 +136,46 @@ export default function App() {
       active = false;
     };
   }, [token, hasSession, networkRevision]);
+
+  useEffect(() => {
+    if (!hasSession || !token) {
+      setCurrentStreak(0);
+      return undefined;
+    }
+    setCurrentStreak(0);
+    let active = true;
+    const loadCurrentStreak = async () => {
+      const [profileResult, allStreakResult] = await Promise.allSettled([
+        userApi.getMe(token),
+        streakApi.all(token),
+      ]);
+      const profileResponse =
+        profileResult.status === "fulfilled" ? profileResult.value : null;
+      const profile =
+        profileResponse?.user ??
+        profileResponse?.data?.user ??
+        profileResponse?.data ??
+        profileResponse;
+      let rankedUsers =
+        allStreakResult.status === "fulfilled"
+          ? normalizeRanking(allStreakResult.value)
+          : [];
+      let userStreak = currentUserStreak(rankedUsers, profile);
+      if (userStreak == null) {
+        try {
+          rankedUsers = normalizeRanking(await streakApi.ranking(token));
+        } catch {
+          rankedUsers = [];
+        }
+        userStreak = currentUserStreak(rankedUsers, profile);
+      }
+      if (active) setCurrentStreak(userStreak ?? 0);
+    };
+    loadCurrentStreak();
+    return () => {
+      active = false;
+    };
+  }, [token, hasSession, networkRevision, streakRevision]);
   const isSignup = screen === "signup";
   const isRecovery = screen === "password-recovery";
   const isHome = [
@@ -165,6 +208,7 @@ export default function App() {
       : Math.max(completedCount, index + 1);
     try {
       await habitApi.verify(habitId, nextCompletedCount, token);
+      setStreakRevision((revision) => revision + 1);
       setHabits(normalizeHabits(await habitApi.list(token)));
       setDataError("");
     } catch (error) {
@@ -237,6 +281,7 @@ export default function App() {
       <Home
         onNavigate={setScreen}
         habits={habits}
+        streak={currentStreak}
         onToggleCheck={toggleHabitCheck}
         onEdit={openEdit}
         token={token}
@@ -247,6 +292,7 @@ export default function App() {
       <Habit
         onNavigate={setScreen}
         habits={habits}
+        streak={currentStreak}
         onToggleCheck={toggleHabitCheck}
         onEdit={openEdit}
         notice={habitNotice}
@@ -259,7 +305,7 @@ export default function App() {
             ? openRecovery("mypage")
             : setScreen(next)
         }
-        streak={Math.max(0, ...habits.map((habit) => habit.streak ?? 0))}
+        streak={currentStreak}
         token={token}
         onLogout={async () => {
           try {
@@ -288,11 +334,12 @@ export default function App() {
       <Ranking
         onNavigate={setScreen}
         token={token}
-        streak={Math.max(0, ...habits.map((habit) => habit.streak ?? 0))}
+        streak={currentStreak}
       />
     ) : screen === "habit-create" ? (
       <HabitForm
         mode="create"
+        streak={currentStreak}
         onNavigate={setScreen}
         onSave={async (value) => {
           try {
@@ -326,6 +373,7 @@ export default function App() {
       <HabitForm
         mode="edit"
         habit={editingHabit}
+        streak={currentStreak}
         onNavigate={setScreen}
         onSave={saveEdit}
         onDelete={deleteHabit}
@@ -349,6 +397,7 @@ export default function App() {
     ) : screen === "password-change" ? (
       <PasswordChange
         token={token}
+        streak={currentStreak}
         onComplete={() => {
           setAuthNotice("비밀번호가 변경되었습니다.");
           setScreen("mypage");
