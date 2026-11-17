@@ -82,6 +82,7 @@ export default function Home({
       </header>
       <div className="workspace-heading">
         <h1>홈</h1>
+        <div className="streak-badge"><b>{streak}일</b><small>연속 일수</small></div>
       </div>
       <section className="habit-section">
         <div className="section-heading">

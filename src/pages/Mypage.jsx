@@ -148,6 +148,7 @@ export default function Mypage({
       </header>
       <div className="workspace-heading">
         <h1>마이페이지</h1>
+        <div className="streak-badge"><b>{streak}일</b><small>연속 일수</small></div>
       </div>
       <main
         className={`profile-content ${editing ? "is-editing" : ""} ${saved ? "is-saved" : ""}`}

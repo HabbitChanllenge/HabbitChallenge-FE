@@ -36,6 +36,13 @@ export default function Habit({
           <b>{streak}일</b>
         </div>
       </header>
+      <div className="workspace-heading">
+        <div className="workspace-title-group">
+          <h1>내 습관</h1>
+          <button className="workspace-action" type="button" onClick={() => onNavigate("habit-create")} aria-label="습관 추가">+</button>
+        </div>
+        <div className="streak-badge"><b>{streak}일</b><small>연속 일수</small></div>
+      </div>
       <main className="habit-page-content">
         <div className="habit-title">
           <h2>내 습관</h2>
