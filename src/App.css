@@ -1845,7 +1845,7 @@ input:focus {
   .habit-form-page { display: block; }
   .habit-editor {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr);
     align-content: start;
     column-gap: clamp(32px, 5vw, 72px);
     row-gap: 18px;
@@ -1865,8 +1865,8 @@ input:focus {
   .habit-choice-grid { grid-template-columns: repeat(3, minmax(90px, 120px)); gap: 10px; }
   .habit-choice-grid button { width: 100%; min-height: 40px; font-size: 14px; }
   .full-choice-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .habit-submit { grid-column: 2; justify-self: end; width: min(100%, 320px); margin-top: 8px; padding: 15px; font-size: 16px; }
-  .delete-habit-button { grid-column: 2; justify-self: end; margin-top: -10px; font-size: 13px; }
+  .habit-submit { grid-column: 1; justify-self: stretch; width: 100%; margin-top: 8px; padding: 15px; font-size: 16px; }
+  .delete-habit-button { grid-column: 1; justify-self: stretch; margin-top: -10px; font-size: 13px; }
   .habit-form-page .habit-editor {
     width: min(100%, 1320px);
     max-width: none;
