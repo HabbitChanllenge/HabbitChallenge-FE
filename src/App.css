@@ -1434,6 +1434,8 @@ input:focus {
 .mypage-page .profile-hero {
   gap: 26px;
   margin: 8px 0 34px;
+  border-bottom: 1px solid #dfe5d5;
+  padding-bottom: 24px;
 }
 .mypage-page .profile-avatar {
   width: 116px;
@@ -1472,6 +1474,21 @@ input:focus {
 }
 .mypage-page .profile-actions {
   margin-top: auto;
+}
+.mypage-page .profile-content.is-editing .profile-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.mypage-page .profile-content.is-editing .profile-save-button {
+  flex: 1 1 auto;
+}
+.mypage-page .profile-content.is-editing .profile-delete-account {
+  flex: 0 0 auto;
+  align-self: center;
+  margin: 0;
+  padding: 12px 8px;
+  white-space: nowrap;
 }
 .mypage-page .profile-actions .primary-button {
   padding: 16px;
@@ -2024,8 +2041,10 @@ input:focus {
     align-items: flex-start;
     gap: 20px;
     margin: 0;
-    padding: 4px 0 0;
+    align-self: stretch;
+    padding: 4px 24px 0 0;
     border: 0;
+    border-right: 1px solid #dfe5d5;
   }
   .mypage-page .profile-info {
     grid-column: 2;
@@ -2038,7 +2057,9 @@ input:focus {
   .mypage-page .profile-password-link { margin-top: -6px; }
   .mypage-page .profile-actions { grid-column: 2; margin-top: 4px; }
   .mypage-page .profile-actions .primary-button { max-width: 280px; border-radius: 12px; }
-  .mypage-page .profile-delete-account { grid-column: 2; align-self: flex-start; margin: 0; }
+  .mypage-page .profile-actions { display: flex; align-items: center; gap: 14px; }
+  .mypage-page .profile-actions .profile-save-button { flex: 1 1 auto; }
+  .mypage-page .profile-delete-account { grid-column: auto; align-self: center; flex: 0 0 auto; margin: 0; padding: 12px 8px; white-space: nowrap; }
   .mypage-page .profile-content.is-editing .profile-hero {
     justify-content: flex-start;
     margin: 0;

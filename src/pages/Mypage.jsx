@@ -261,6 +261,13 @@ export default function Mypage({
               >
                 수정 완료하기
               </button>
+              <button
+                type="button"
+                className="delete-account profile-delete-account"
+                onClick={() => setConfirmDelete(true)}
+              >
+                회원 탈퇴
+              </button>
             </>
           ) : (
             <button
@@ -272,15 +279,6 @@ export default function Mypage({
             </button>
           )}
         </div>
-        {editing && (
-          <button
-            type="button"
-            className="delete-account profile-delete-account"
-            onClick={() => setConfirmDelete(true)}
-          >
-            회원 탈퇴
-          </button>
-        )}
       </main>
       <BottomNav active="mypage" onNavigate={onNavigate} />
       {confirmDelete && (
