@@ -1830,7 +1830,7 @@ input:focus {
   .podium-user.first { min-height: 320px; background: transparent; }
   .podium-user.second { min-height: 220px; }
   .podium-user.third { min-height: 190px; }
-  .podium-user.first .trophy-icon { inset: 0; width: 100%; height: 100%; object-fit: contain; }
+  .podium-user.first .trophy-icon { inset: 0; width: 100%; height: 100%; transform: none; object-fit: contain; }
   .podium-user b { top: -62px; width: 140%; font-size: 25px; line-height: 1.15; }
   .podium-user span { top: -31px; font-size: 22px; line-height: 1.15; }
   .ranking-list { width: 100%; max-width: 1080px; margin: 0 auto; gap: 10px; }
