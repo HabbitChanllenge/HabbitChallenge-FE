@@ -732,6 +732,15 @@ input:focus {
   padding: 22px 18px;
   background: white;
 }
+.habit-form-page > .modal-backdrop {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.habit-form-page > .modal-backdrop > .confirm-modal {
+  flex: 0 1 auto;
+  margin: 0;
+}
 .password-alert-backdrop {
   z-index: 6;
   padding: 18px;
