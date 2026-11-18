@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import logo from "../assets/logo.svg";
 import BottomNav from "../components/BottomNav.jsx";
 import HabitCard from "../components/HabitCard.jsx";
@@ -12,7 +12,6 @@ export default function Habit({
   notice,
   onClearNotice,
 }) {
-  const habitListRef = useRef(null);
   const target = habits.reduce(
     (sum, habit) =>
       sum +
@@ -28,24 +27,6 @@ export default function Habit({
     const timer = window.setTimeout(onClearNotice, 1200);
     return () => window.clearTimeout(timer);
   }, [notice, onClearNotice]);
-  useEffect(() => {
-    const list = habitListRef.current;
-    if (!list) return undefined;
-
-    const updateCardSpans = () => {
-      list.querySelectorAll(":scope > .habit-card").forEach((card) => {
-        const rowSize = 4;
-        const rowGap = 16;
-        const span = Math.ceil((card.scrollHeight + rowGap) / (rowSize + rowGap));
-        card.style.gridRowEnd = `span ${span}`;
-      });
-    };
-
-    updateCardSpans();
-    const observer = new ResizeObserver(updateCardSpans);
-    list.querySelectorAll(":scope > .habit-card").forEach((card) => observer.observe(card));
-    return () => observer.disconnect();
-  }, [habits.length]);
   return (
     <div className="sub-page">
       <header className="home-header">
@@ -86,14 +67,20 @@ export default function Habit({
           </div>
         </section>
         {habits.length ? (
-          <div className="habit-list habit-list-scroll" ref={habitListRef}>
-            {habits.map((habit, index) => (
-              <HabitCard
-                key={habit.id ?? index}
-                habit={habit}
-                onToggleCheck={onToggleCheck}
-                onEdit={onEdit}
-              />
+          <div className="habit-list habit-list-scroll">
+            {[0, 1].map((column) => (
+              <div className="habit-card-column" key={column}>
+                {habits.map((habit, index) =>
+                  index % 2 === column ? (
+                    <HabitCard
+                      key={habit.id ?? index}
+                      habit={habit}
+                      onToggleCheck={onToggleCheck}
+                      onEdit={onEdit}
+                    />
+                  ) : null,
+                )}
+              </div>
             ))}
           </div>
         ) : (
