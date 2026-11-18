@@ -2061,6 +2061,7 @@ input:focus {
   .mypage-page .profile-info label { gap: 10px; }
   .mypage-page .profile-info input { min-height: 48px; border-radius: 10px; }
   .mypage-page .profile-password-link { margin-top: -6px; }
+  .mypage-page .profile-content.is-editing .profile-save-error { grid-column: 2; margin: 0 0 8px; text-align: left; }
   .mypage-page .profile-actions { grid-column: 2; margin-top: 4px; }
   .mypage-page .profile-actions .primary-button { max-width: 280px; border-radius: 12px; }
   .mypage-page .profile-actions { display: flex; align-items: center; gap: 14px; }
