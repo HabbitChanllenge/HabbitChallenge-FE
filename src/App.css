@@ -1814,6 +1814,8 @@ input:focus {
   .today-progress { height: 42px; border-radius: 11px; }
   .today-progress span { font-size: 15px; }
   .habit-list-scroll { grid-template-columns: repeat(2, minmax(280px, 1fr)); gap: 16px; overflow: visible; }
+  .habit-list-scroll { align-items: stretch; }
+  .habit-list-scroll > .habit-card { align-self: stretch; }
   .ranking-page { margin: 0 auto; }
   .ranking-caption { margin: 8px 0 30px; font-size: 14px; }
   .ranking-podium {
