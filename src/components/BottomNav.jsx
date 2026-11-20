@@ -37,6 +37,9 @@ const items = [
 export default function BottomNav({ active, onNavigate }) {
   return (
     <nav className="bottom-nav" aria-label="주요 메뉴">
+      <button className="nav-brand" type="button" onClick={() => onNavigate("home")} aria-label="새싹루틴 홈">
+        <img src={new URL("../assets/logo.svg", import.meta.url).href} alt="새싹루틴" />
+      </button>
       {items.map(([id, label]) => (
         <button
           className={active === id ? "active" : ""}

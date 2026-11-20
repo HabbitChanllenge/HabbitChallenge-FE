@@ -81,10 +81,7 @@ export default function Mypage({
     setSaveAttempted(true);
     if (
       !emailPattern.test(form.email) ||
-      !form.name.trim() ||
-      !currentPassword ||
-      !passwordPattern.test(newPassword) ||
-      newPassword !== confirmPassword
+      !form.name.trim()
     )
       return;
     setRequestError("");
@@ -93,8 +90,6 @@ export default function Mypage({
         {
           userId: form.name.trim(),
           email: form.email.trim(),
-          currentPassword,
-          newPassword,
         },
         token,
       );
@@ -141,7 +136,7 @@ export default function Mypage({
     <div className="sub-page mypage-page">
       <header className="home-header">
         <span />
-        <img src={logo} alt="새싹루틴" />
+        <img src={logo} alt="새싹루틴 홈" role="button" tabIndex={0} onClick={() => onNavigate("home")} onKeyDown={(event) => event.key === "Enter" && onNavigate("home")} />
         <div className="streak-badge">
           <b>{streak}일</b>
         </div>
@@ -194,48 +189,7 @@ export default function Mypage({
           </label>
         </section>
         {editing && (
-          <section className="profile-info">
-            <label>
-              현재 비밀번호
-              <input
-                type="password"
-                value={currentPassword}
-                onChange={(event) => setCurrentPassword(event.target.value)}
-                autoComplete="current-password"
-              />
-              {errors.currentPassword && (
-                <small className="error-message">
-                  {errors.currentPassword}
-                </small>
-              )}
-            </label>
-            <label>
-              새 비밀번호
-              <input
-                type="password"
-                value={newPassword}
-                onChange={(event) => setNewPassword(event.target.value)}
-                autoComplete="new-password"
-              />
-              {errors.newPassword && (
-                <small className="error-message">{errors.newPassword}</small>
-              )}
-            </label>
-            <label>
-              새 비밀번호 확인
-              <input
-                type="password"
-                value={confirmPassword}
-                onChange={(event) => setConfirmPassword(event.target.value)}
-                autoComplete="new-password"
-              />
-              {errors.confirmPassword && (
-                <small className="error-message">
-                  {errors.confirmPassword}
-                </small>
-              )}
-            </label>
-          </section>
+          <button type="button" className="text-button profile-password-link" onClick={() => onNavigate("password-change")}>비밀번호 변경</button>
         )}
         {requestError && (
           <p className="profile-save-error" role="alert">
@@ -243,11 +197,7 @@ export default function Mypage({
           </p>
         )}
         {saveAttempted &&
-          (errors.email ||
-            errors.name ||
-            errors.currentPassword ||
-            errors.newPassword ||
-            errors.confirmPassword) && (
+          (errors.email || errors.name) && (
             <p className="profile-save-error">형식에 맞게 입력해주세요.</p>
           )}
         {saved && <p className="save-message">수정이 완료되었습니다.</p>}

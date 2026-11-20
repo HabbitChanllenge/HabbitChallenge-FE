@@ -301,8 +301,10 @@ export default function App() {
     ) : screen === "mypage" ? (
       <Mypage
         onNavigate={(next) =>
-          next === "password-recovery"
-            ? openRecovery("mypage")
+          next === "password-change"
+            ? setScreen("password-change")
+            : next === "password-recovery"
+              ? openRecovery("mypage")
             : setScreen(next)
         }
         streak={currentStreak}

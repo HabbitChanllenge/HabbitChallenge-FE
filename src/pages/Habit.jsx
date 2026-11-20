@@ -31,7 +31,7 @@ export default function Habit({
     <div className="sub-page">
       <header className="home-header">
         <span />
-        <img src={logo} alt="새싹루틴" />
+        <img src={logo} alt="새싹루틴 홈" role="button" tabIndex={0} onClick={() => onNavigate("home")} onKeyDown={(event) => event.key === "Enter" && onNavigate("home")} />
         <div className="streak-badge">
           <b>{streak}일</b>
         </div>

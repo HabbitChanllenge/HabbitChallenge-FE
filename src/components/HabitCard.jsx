@@ -16,7 +16,7 @@ export default function HabitCard({ habit, onEdit, onToggleCheck }) {
       : "is-pending";
   const frequencyDetail =
     habit.frequency === "일주일"
-      ? `매주 ${completedCount}/${target}`
+      ? `매주 ${completedCount}/${target} · ${habit.verificationDays?.join(", ") ?? ""}`
       : `매일 ${completedCount}/${target}`;
 
   return (
@@ -37,7 +37,7 @@ export default function HabitCard({ habit, onEdit, onToggleCheck }) {
         </button>
         <button type="button" className="habit-streak-button">
           <span>연속 성공</span>
-          <strong>{habit.streak ?? 0}일</strong>
+          <strong>{habit.frequency === "일주일" ? Math.floor((habit.streak ?? 0) / 7) : habit.streak ?? 0}{habit.frequency === "일주일" ? "주" : "일"}</strong>
         </button>
       </div>
       {showChecks && (

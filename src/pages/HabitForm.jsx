@@ -91,7 +91,7 @@ export default function HabitForm({
     <div className="sub-page habit-form-page">
       <header className="home-header">
         <span />
-        <img src={logo} alt="새싹루틴" />
+        <img src={logo} alt="새싹루틴 홈" role="button" tabIndex={0} onClick={() => onNavigate("home")} onKeyDown={(event) => event.key === "Enter" && onNavigate("home")} />
         <span />
       </header>
       <div className="workspace-heading">
@@ -171,7 +171,7 @@ export default function HabitForm({
               ))}
             </div>
             <input
-              className="custom-category"
+              className={`custom-category ${customCount ? "selected" : ""}`}
               inputMode="numeric"
               value={customCount}
               onChange={(event) => {

@@ -90,6 +90,13 @@ export const habitApi = {
   update: (id, body, token) => {
     const requestBody = {};
     if (body.name !== undefined) requestBody.name = body.name;
+    if (body.frequency !== undefined) {
+      const weekly = /week|일주일/.test(body.frequency.toLowerCase());
+      requestBody.periodType = weekly ? "week" : "day";
+    }
+    if (body.verificationDays !== undefined) {
+      requestBody.dayOfWeek = body.verificationDays.map(dayName);
+    }
     if (body.category !== undefined || body.categories !== undefined) {
       requestBody.category = Array.isArray(body.category)
         ? body.category
