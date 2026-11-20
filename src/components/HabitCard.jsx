@@ -9,6 +9,11 @@ export default function HabitCard({ habit, onEdit, onToggleCheck }) {
   const checks = habit.checks ?? [];
   const completedCount = checks.length;
   const isComplete = completedCount >= target;
+  const streakCount = Number(habit.streak ?? 0);
+  const displayedStreak =
+    habit.frequency === "일주일"
+      ? Math.max(Math.ceil(streakCount / 7), isComplete ? 1 : 0)
+      : streakCount;
   const statusClass = isComplete
     ? "is-complete"
     : completedCount > 0
@@ -37,7 +42,7 @@ export default function HabitCard({ habit, onEdit, onToggleCheck }) {
         </button>
         <div className="habit-streak-button">
           <span>연속 성공</span>
-          <strong>{habit.frequency === "일주일" ? Math.floor((habit.streak ?? 0) / 7) : habit.streak ?? 0}{habit.frequency === "일주일" ? "주" : "일"}</strong>
+          <strong>{displayedStreak}{habit.frequency === "일주일" ? "주" : "일"}</strong>
         </div>
       </div>
       {showChecks && (

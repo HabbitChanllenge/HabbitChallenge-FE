@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { authApi, userApi } from "../lib/endpoints.js";
+import PasswordVisibilityIcon from "../components/PasswordVisibilityIcon.jsx";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -18,6 +19,7 @@ function extractToken(value, depth = 0) {
 export default function Login({ onSignup, onLogin, onForgotPassword }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [requestError, setRequestError] = useState("");
   const [credentialsRejected, setCredentialsRejected] = useState(false);
@@ -84,18 +86,22 @@ export default function Login({ onSignup, onLogin, onForgotPassword }) {
         </label>
         <label className="field">
           <span>비밀번호</span>
-          <input
-            className={passwordError || credentialsRejected ? "has-error" : ""}
-            type="password"
-            value={password}
-            onChange={(event) => {
-              setPassword(event.target.value);
-              setCredentialsRejected(false);
-              setRequestError("");
-            }}
-            placeholder="비밀번호를 입력해 주세요."
-            autoComplete="current-password"
-          />
+          <div className={`input-wrap login-password-input ${passwordError || credentialsRejected ? "has-error" : ""}`}>
+            <input
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(event) => {
+                setPassword(event.target.value);
+                setCredentialsRejected(false);
+                setRequestError("");
+              }}
+              placeholder="\uBE44\uBC00\uBC88\uD638\uB97C \uC785\uB825\uD574 \uC8FC\uC138\uC694"
+              autoComplete="current-password"
+            />
+            <button type="button" className="visibility-button" onClick={() => setShowPassword((value) => !value)} aria-label={showPassword ? "\uBE44\uBC00\uBC88\uD638 \uC228\uAE30\uAE30" : "\uBE44\uBC00\uBC88\uD638 \uD45C\uC2DC"}>
+              <PasswordVisibilityIcon visible={showPassword} />
+            </button>
+          </div>
           {passwordError && (
             <small className="error-message">{passwordError}</small>
           )}

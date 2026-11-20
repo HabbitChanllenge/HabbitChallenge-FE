@@ -130,7 +130,7 @@ export default function PasswordChange({ token, onComplete, onNavigate, streak =
           </small>
         )}
         <button
-          className={`primary-button password-change-submit ${valid ? "is-ready" : ""}`}
+          className={`primary-button profile-edit-button password-change-submit ${valid ? "is-ready" : ""}`}
           type="submit"
           disabled={loading}
         >
