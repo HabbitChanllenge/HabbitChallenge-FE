@@ -21,12 +21,16 @@ const koreanWeekDays = [
   "\uC77C",
 ];
 
-const dayName = (day) => {
-  if (Number.isInteger(day)) return weekDays[day - 1] ?? String(day);
+const dayNumber = (day) => {
+  if (Number.isInteger(day)) return day;
   const value = String(day).trim();
+  const numericDay = Number(value);
+  if (Number.isInteger(numericDay) && numericDay >= 1 && numericDay <= 7)
+    return numericDay;
+  const englishIndex = weekDays.indexOf(value.toLowerCase());
+  if (englishIndex >= 0) return englishIndex + 1;
   const koreanIndex = koreanWeekDays.indexOf(value);
-  if (koreanIndex >= 0) return weekDays[koreanIndex];
-  return value.toLowerCase();
+  return koreanIndex >= 0 ? koreanIndex + 1 : day;
 };
 
 function habitCategories(value) {
@@ -48,7 +52,7 @@ export function toWeeklyHabitCreateRequest(value) {
     name: value.name,
     periodType: "week",
     categories: habitCategories(value),
-    dayOfWeek: (value.dayOfWeek ?? value.verificationDays ?? []).map(dayName),
+    dayOfWeek: (value.dayOfWeek ?? value.verificationDays ?? []).map(dayNumber),
   };
 }
 
@@ -95,7 +99,7 @@ export const habitApi = {
       requestBody.periodType = weekly ? "week" : "day";
     }
     if (body.verificationDays !== undefined) {
-      requestBody.dayOfWeek = body.verificationDays.map(dayName);
+      requestBody.dayOfWeek = body.verificationDays.map(dayNumber);
     }
     if (body.category !== undefined || body.categories !== undefined) {
       requestBody.category = Array.isArray(body.category)

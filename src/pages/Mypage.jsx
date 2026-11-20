@@ -156,9 +156,11 @@ export default function Mypage({
           />
           <div className="profile-identity">
             <b>{loading ? "불러오는 중…" : form.name}</b>
-            <button type="button" onClick={onLogout}>
-              로그아웃하기
-            </button>
+            {!editing && (
+              <button type="button" onClick={onLogout}>
+                로그아웃하기
+              </button>
+            )}
           </div>
         </div>
         <section className="profile-info">

@@ -2350,14 +2350,25 @@ input:focus {
 /* Ranking, profile, and habit action refinements */
 .ranking-podium { grid-template-columns: .72fr 1.15fr .72fr; }
 .habit-card .habit-actions .habit-streak-button {
+  display: flex;
   flex: 1;
   min-width: 0;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 9px;
   padding: 6px 4px;
   background: #95cd1a;
+  color: #fff;
   font-size: 9px;
+  font-weight: 700;
+  line-height: 1.15;
   cursor: default;
 }
 .habit-streak-button strong { font-size: inherit; font-weight: 800; }
+.home-ranking-podium { grid-template-columns: .72fr 1.15fr .72fr; }
+.mypage-page .profile-info label { display: grid; grid-template-columns: minmax(0, 1fr); }
+.mypage-page .profile-info input { width: 100%; }
 .mypage-page .profile-content {
   width: min(100%, 1080px);
   max-width: 1080px;
@@ -2402,4 +2413,27 @@ input:focus {
     box-shadow: none;
   }
   .mypage-page .profile-info { width: min(100%, 760px); max-width: 760px; }
+  .home-podium-user.second { min-height: 80px; }
+  .home-podium-user.third { min-height: 68px; }
+}
+
+/* Readable, consistent validation messages across forms */
+.error-message,
+.habit-editor small,
+.mypage-page .profile-save-error {
+  font-size: clamp(12px, 0.85rem, 14px);
+  font-weight: 600;
+  line-height: 1.45;
+}
+.habit-editor small,
+.error-message {
+  display: block;
+  margin-top: 3px;
+}
+.password-change-error { margin-top: 8px; }
+
+@media (min-width: 900px) {
+  .error-message,
+  .habit-editor small,
+  .mypage-page .profile-save-error { font-size: 14px; }
 }
