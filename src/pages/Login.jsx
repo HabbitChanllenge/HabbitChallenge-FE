@@ -95,7 +95,7 @@ export default function Login({ onSignup, onLogin, onForgotPassword }) {
                 setCredentialsRejected(false);
                 setRequestError("");
               }}
-              placeholder="\uBE44\uBC00\uBC88\uD638\uB97C \uC785\uB825\uD574 \uC8FC\uC138\uC694"
+              placeholder={"\uBE44\uBC00\uBC88\uD638\uB97C \uC785\uB825\uD574 \uC8FC\uC138\uC694"}
               autoComplete="current-password"
             />
             <button type="button" className="visibility-button" onClick={() => setShowPassword((value) => !value)} aria-label={showPassword ? "\uBE44\uBC00\uBC88\uD638 \uC228\uAE30\uAE30" : "\uBE44\uBC00\uBC88\uD638 \uD45C\uC2DC"}>
