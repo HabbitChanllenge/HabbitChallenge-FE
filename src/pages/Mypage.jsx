@@ -188,9 +188,6 @@ export default function Mypage({
             )}
           </label>
         </section>
-        {editing && (
-          <button type="button" className="text-button profile-password-link" onClick={() => onNavigate("password-change")}>비밀번호 변경</button>
-        )}
         {requestError && (
           <p className="profile-save-error" role="alert">
             {requestError}
@@ -211,13 +208,18 @@ export default function Mypage({
               >
                 수정 완료하기
               </button>
-              <button
-                type="button"
-                className="delete-account profile-delete-account"
-                onClick={() => setConfirmDelete(true)}
-              >
-                회원 탈퇴
-              </button>
+              <div className="profile-secondary-actions">
+                <button type="button" className="text-button profile-password-link" onClick={() => onNavigate("password-change")}>
+                  비밀번호 변경
+                </button>
+                <button
+                  type="button"
+                  className="delete-account profile-delete-account"
+                  onClick={() => setConfirmDelete(true)}
+                >
+                  회원 탈퇴
+                </button>
+              </div>
             </>
           ) : (
             <button

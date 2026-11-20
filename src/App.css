@@ -2346,3 +2346,60 @@ input:focus {
   .habit-editor > fieldset,
   .habit-editor > .editor-label { width: 100%; }
 }
+
+/* Ranking, profile, and habit action refinements */
+.ranking-podium { grid-template-columns: .72fr 1.15fr .72fr; }
+.habit-card .habit-actions .habit-streak-button {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 4px;
+  background: #95cd1a;
+  font-size: 9px;
+  cursor: default;
+}
+.habit-streak-button strong { font-size: inherit; font-weight: 800; }
+.mypage-page .profile-content {
+  width: min(100%, 1080px);
+  max-width: 1080px;
+  padding: 12px 0 30px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.mypage-page .profile-hero { border: 0; }
+.mypage-page .profile-info { width: min(100%, 760px); max-width: 760px; }
+.mypage-page .profile-actions { gap: 16px; }
+.mypage-page .profile-secondary-actions {
+  display: flex;
+  width: min(100%, 360px);
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.mypage-page .profile-actions .profile-secondary-actions .profile-password-link,
+.mypage-page .profile-actions .profile-secondary-actions .profile-delete-account {
+  width: auto;
+  max-width: none;
+  margin: 0;
+  padding: 10px 0;
+  white-space: nowrap;
+}
+.mypage-page .profile-secondary-actions .profile-delete-account { color: #888; }
+
+@media (min-width: 900px) {
+  .ranking-podium { grid-template-columns: none; }
+  .ranking-podium .podium-user.second,
+  .ranking-podium .podium-user.third { flex: 0 1 22%; }
+  .ranking-podium .podium-user.first { flex: 0 1 36%; }
+  .mypage-page .profile-content {
+    width: min(100%, 1080px);
+    max-width: 1080px;
+    padding: 12px 0 30px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+  .mypage-page .profile-info { width: min(100%, 760px); max-width: 760px; }
+}
