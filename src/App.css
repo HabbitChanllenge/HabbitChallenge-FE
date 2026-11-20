@@ -2013,6 +2013,87 @@ input:focus {
   .profile-content { padding-left: 16px; padding-right: 16px; }
 }
 
+/* Final page-level layout adjustments */
+.forgot-password-row { margin-top: 8px; padding: 4px 0; }
+.password-change-fields { gap: 24px; }
+.password-change-submit { margin-top: 24px; }
+
+.mypage-page .profile-content {
+  display: flex;
+  width: min(100%, 900px);
+  max-width: 900px;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  margin: 0 auto;
+  padding: 30px clamp(18px, 4vw, 44px) 38px;
+  border: 1px solid #e9eddf;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(48, 64, 20, .04);
+}
+.mypage-page .profile-hero,
+.mypage-page .profile-content.is-editing .profile-hero {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 0;
+  padding: 0 0 22px;
+  border: 0;
+  border-bottom: 1px solid #e4e9dc;
+}
+.mypage-page .profile-identity,
+.mypage-page .profile-content.is-editing .profile-identity {
+  display: grid;
+  justify-items: center;
+  align-self: center;
+  text-align: center;
+}
+.mypage-page .profile-info,
+.mypage-page .profile-content.is-editing .profile-info {
+  display: grid;
+  width: min(100%, 620px);
+  max-width: 620px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+}
+.mypage-page .profile-info label { width: 100%; }
+.mypage-page .profile-password-link { align-self: center; margin: 0; }
+.mypage-page .profile-actions {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  margin-top: 0;
+}
+.mypage-page .profile-actions .primary-button { width: min(100%, 360px); flex: none; }
+.mypage-page .profile-content.is-editing .profile-delete-account { align-self: center; margin: 0; }
+
+@media (min-width: 900px) {
+  .ranking-page .podium-user.second { min-height: 150px; }
+  .ranking-page .podium-user.third { min-height: 125px; }
+  .mypage-page .profile-content { max-width: 900px; }
+  .password-change-form {
+    display: grid;
+    width: min(100%, 900px);
+    max-width: 900px;
+    min-height: 0;
+    gap: 24px;
+    margin: 20px auto 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+  .password-change-form h1 { margin: 0 0 8px; }
+  .password-change-submit { width: min(100%, 620px); justify-self: center; margin-top: 8px; }
+}
+
 /* Responsive workspace refinements */
 .nav-brand { display: none; }
 .habit-editor .editor-label input,
@@ -2218,4 +2299,50 @@ input:focus {
     padding-bottom: 20px;
   }
   .mypage-page .profile-content.is-editing .profile-actions { margin-top: 4px; }
+}
+
+@media (min-width: 900px) {
+  .mypage-page .profile-content {
+    display: flex;
+    width: min(100%, 900px);
+    max-width: 900px;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    padding: 30px 44px 38px;
+    border: 1px solid #e9eddf;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 8px 24px rgba(48, 64, 20, .04);
+  }
+  .mypage-page .profile-hero,
+  .mypage-page .profile-content.is-editing .profile-hero {
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 0 0 22px;
+    border: 0;
+    border-bottom: 1px solid #e4e9dc;
+  }
+  .mypage-page .profile-info,
+  .mypage-page .profile-content.is-editing .profile-info {
+    display: grid;
+    width: min(100%, 620px);
+    max-width: 620px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+  .mypage-page .profile-password-link { align-self: center; margin: 0; }
+  .mypage-page .profile-actions { width: 100%; flex-direction: column; margin-top: 0; }
+  .mypage-page .profile-actions .primary-button { width: min(100%, 360px); max-width: 360px; flex: none; }
+  .mypage-page .profile-content.is-editing .profile-save-error { margin: 0; text-align: center; }
+}
+
+@media (min-width: 900px) {
+  .habit-editor { grid-template-columns: minmax(0, 1fr); }
+  .habit-editor > * { grid-column: 1; }
+  .habit-editor > fieldset,
+  .habit-editor > .editor-label { width: 100%; }
 }
