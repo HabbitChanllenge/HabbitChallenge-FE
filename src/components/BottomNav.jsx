@@ -1,5 +1,3 @@
-import rankingIcon from "../assets/iconranking.svg";
-
 const icons = {
   home: (
     <>
@@ -48,13 +46,9 @@ export default function BottomNav({ active, onNavigate }) {
           aria-current={active === id ? "page" : undefined}
           onClick={() => onNavigate(id)}
         >
-          {id === "ranking" ? (
-            <img className="nav-icon-image" src={rankingIcon} alt="" />
-          ) : (
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              {icons[id]}
-            </svg>
-          )}
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            {icons[id]}
+          </svg>
           <small>{label}</small>
         </button>
       ))}
