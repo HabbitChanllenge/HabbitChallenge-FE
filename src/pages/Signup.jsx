@@ -1,4 +1,5 @@
 import { useState } from "react";
+import PasswordVisibilityIcon from "../components/PasswordVisibilityIcon.jsx";
 import { authApi } from "../lib/endpoints.js";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -22,7 +23,7 @@ function PasswordField({ label, value, onChange, placeholder, error }) {
           aria-label={visible ? "비밀번호 숨기기" : "비밀번호 표시"}
           onClick={() => setVisible(!visible)}
         >
-          {visible ? "◌" : "◉"}
+          <PasswordVisibilityIcon visible={visible} />
         </button>
       </div>
       {error && <small className="error-message">{error}</small>}

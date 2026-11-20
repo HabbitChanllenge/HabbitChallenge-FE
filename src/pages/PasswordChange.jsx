@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import PasswordVisibilityIcon from "../components/PasswordVisibilityIcon.jsx";
 import BottomNav from "../components/BottomNav.jsx";
 import { userApi } from "../lib/endpoints.js";
 
@@ -24,9 +25,9 @@ function PasswordField({ label, value, onChange, error, placeholder }) {
           type="button"
           className="password-eye"
           onClick={() => setVisible((shown) => !shown)}
-          aria-label={visible ? "비밀번호 숨기기" : "비밀번호 보기"}
+          aria-label={visible ? "비밀번호 숨기기" : "비밀번호 표시"}
         >
-          {visible ? "◉" : "◉̸"}
+          <PasswordVisibilityIcon visible={visible} />
         </button>
       </div>
     </label>

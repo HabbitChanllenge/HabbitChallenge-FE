@@ -32,15 +32,23 @@ export async function apiRequest(path, options = {}) {
     requestBody = JSON.stringify(body);
   }
 
-  const response = await fetch(
-    `${apiBaseUrl}${path.startsWith("/") ? path : `/${path}`}`,
-    {
-      ...requestOptions,
-      headers: requestHeaders,
-      body: requestBody,
-      credentials: requestOptions.credentials ?? "include",
-    },
-  );
+  let response;
+  try {
+    response = await fetch(
+      `${apiBaseUrl}${path.startsWith("/") ? path : `/${path}`}`,
+      {
+        ...requestOptions,
+        headers: requestHeaders,
+        body: requestBody,
+        credentials: requestOptions.credentials ?? "include",
+      },
+    );
+  } catch (error) {
+    throw new ApiError(
+      "서버에 연결하지 못했습니다. 백엔드 서버 실행 상태와 API 주소, CORS 설정을 확인해 주세요.",
+      { data: { cause: error instanceof Error ? error.message : String(error) } },
+    );
+  }
 
   if (response.status === 204) return null;
 

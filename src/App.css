@@ -117,14 +117,27 @@ input:focus {
   outline: 0;
 }
 .visibility-button {
-  width: 43px;
+  display: grid;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  padding: 0;
   border: 0;
   background: transparent;
-  color: #989898;
+  color: #777;
   cursor: pointer;
 }
-.eye-icon {
-  font-size: 17px;
+.visibility-button svg,
+.password-eye svg {
+  display: block;
+  width: 28px;
+  height: 28px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 .has-error {
   outline-color: #ff7474 !important;
@@ -258,12 +271,15 @@ input:focus {
   font-size: 13px;
 }
 .password-eye {
-  flex: 0 0 42px;
-  height: 40px;
+  display: grid;
+  flex: 0 0 46px;
+  width: 46px;
+  height: 46px;
+  place-items: center;
+  padding: 0;
   border: 0;
   background: transparent;
   color: #777;
-  font-size: 17px;
   cursor: pointer;
 }
 .password-change-error {
@@ -1939,6 +1955,7 @@ input:focus {
 
 /* Fluid layouts for phones, tablets, and narrow desktop windows */
 @media (max-width: 899px) {
+  .home-indicator { display: none; }
   .app-shell { display: block; min-height: 100svh; padding: 0; background: #f6f8f2; }
   .phone-frame,
   .phone-frame.home-mode {
