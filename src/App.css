@@ -3440,3 +3440,21 @@ input:focus {
   .ranking-podium .podium-user.third { min-height: 76px; }
   .ranking-list div { min-height: 44px; }
 }
+
+
+/* Ranking spacing and width refinement */
+@media (min-width: 900px) {
+  .ranking-podium {
+    width: min(100%, 580px);
+    margin-top: 44px;
+    margin-bottom: 22px;
+    gap: 14px;
+  }
+  .ranking-list { max-width: 760px; }
+}
+@media (max-width: 899px) {
+  .ranking-podium {
+    width: min(100%, 560px);
+    margin-top: 52px;
+  }
+}

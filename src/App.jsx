@@ -231,6 +231,16 @@ export default function App() {
   const saveEdit = async (value) => {
     try {
       await habitApi.update(editingHabitId, value, token);
+      const previousCompletedCount = Number(value.completedCount ?? 0);
+      const targetCount = Number(
+        value.verificationCount ??
+          value.verificationDays?.length ??
+          previousCompletedCount,
+      );
+      const completedCount = Math.min(previousCompletedCount, targetCount);
+      if (completedCount > 0) {
+        await habitApi.verify(editingHabitId, completedCount, token);
+      }
       setHabits(normalizeHabits(await habitApi.list(token)));
       setDataError("");
     } catch (error) {
