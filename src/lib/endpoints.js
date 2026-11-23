@@ -93,12 +93,17 @@ export const habitApi = {
     }),
   update: (id, body, token) => {
     const requestBody = {};
+    const frequency = String(body.frequency ?? body.periodType ?? "").toLowerCase();
+    const isWeekly =
+      body.dayOfWeek !== undefined ||
+      (body.verificationDays?.length ?? 0) > 0 ||
+      frequency.includes("week") ||
+      frequency.includes("\uC77C\uC8FC\uC77C");
     if (body.name !== undefined) requestBody.name = body.name;
     if (body.frequency !== undefined) {
-      const weekly = /week|일주일/.test(body.frequency.toLowerCase());
-      requestBody.periodType = weekly ? "week" : "day";
+      requestBody.periodType = isWeekly ? "week" : "day";
     }
-    if (body.verificationDays !== undefined) {
+    if (body.verificationDays !== undefined && isWeekly) {
       requestBody.dayOfWeek = body.verificationDays.map(dayNumber);
     }
     if (body.category !== undefined || body.categories !== undefined) {
@@ -108,10 +113,6 @@ export const habitApi = {
           ? body.categories
           : [body.category];
     }
-    const isWeekly =
-      body.dayOfWeek !== undefined ||
-      (body.verificationDays?.length ?? 0) > 0 ||
-      /week/i.test(body.frequency ?? body.periodType ?? "");
     if (
       !isWeekly &&
       (body.totalRepeat !== undefined || body.verificationCount !== undefined)
@@ -119,6 +120,9 @@ export const habitApi = {
       requestBody.totalRepeat = Number(
         body.totalRepeat ?? body.verificationCount,
       );
+    }
+    if (body.completedCount !== undefined) {
+      requestBody.completedCount = Number(body.completedCount);
     }
     return apiRequest(withId("/habits/update/:id", id), {
       method: "PATCH",

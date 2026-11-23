@@ -2401,6 +2401,96 @@ input:focus {
 }
 .habit-card .habit-actions .habit-streak-button { flex-direction: column; gap: 3px; }
 
+/* Final ranking and modal stacking overrides */
+.modal-backdrop { z-index: 50; }
+.ranking-screen .ranking-page { padding: 16px 4px; overflow: visible; }
+.ranking-podium { margin: 30px auto 18px; min-height: 170px; gap: 14px; }
+.ranking-podium .podium-user,
+.ranking-podium .podium-user.first,
+.ranking-podium .podium-user.second,
+.ranking-podium .podium-user.third {
+  flex: 1 1 0;
+  min-height: 145px;
+  border-radius: 14px 14px 10px 10px;
+  padding: 10px;
+}
+.ranking-podium .podium-user.first { min-height: 170px; }
+.ranking-podium .podium-user.second { min-height: 145px; }
+.ranking-podium .podium-user.third { min-height: 125px; }
+.ranking-podium .podium-user b { top: -36px; width: 100%; font-size: 16px; }
+.ranking-podium .podium-user span { top: -18px; font-size: 14px; }
+.ranking-list { gap: 6px; margin-top: 10px; }
+.ranking-list div { min-height: 44px; padding: 0 14px; font-size: 14px; }
+.ranking-list b,
+.ranking-list strong { font-size: 14px; }
+
+@media (min-width: 900px) {
+  .ranking-screen .ranking-page { padding: 0; }
+  .ranking-podium { width: min(100%, 720px); min-height: 170px; margin: 20px auto 16px; gap: 14px; }
+  .ranking-podium .podium-user,
+  .ranking-podium .podium-user.first,
+  .ranking-podium .podium-user.second,
+  .ranking-podium .podium-user.third { flex: 1 1 0; min-height: 145px; }
+  .ranking-podium .podium-user.first { min-height: 170px; }
+  .ranking-podium .podium-user.second { min-height: 145px; }
+  .ranking-podium .podium-user.third { min-height: 125px; }
+  .ranking-podium .podium-user b { top: -36px; font-size: 16px; }
+  .ranking-podium .podium-user span { top: -18px; font-size: 14px; }
+  .ranking-list { max-width: 900px; gap: 5px; margin-top: 8px; }
+  .ranking-list div { min-height: 40px; }
+}
+
+@media (max-width: 899px) {
+  .ranking-screen .ranking-page { padding-top: 12px; }
+  .ranking-podium { margin-top: 38px; margin-bottom: 20px; }
+  .ranking-list div { min-height: 44px; }
+}
+
+/* Compact ranking overview and full-screen confirmation overlays */
+.modal-backdrop { z-index: 50; }
+.ranking-screen .ranking-page { padding: 16px 4px; overflow: visible; }
+.ranking-podium { margin: 30px auto 18px; min-height: 170px; gap: 14px; }
+.ranking-podium .podium-user,
+.ranking-podium .podium-user.first,
+.ranking-podium .podium-user.second,
+.ranking-podium .podium-user.third {
+  flex: 1 1 0;
+  min-height: 145px;
+  border-radius: 14px 14px 10px 10px;
+  padding: 10px;
+}
+.ranking-podium .podium-user.first { min-height: 170px; }
+.ranking-podium .podium-user.second { min-height: 145px; }
+.ranking-podium .podium-user.third { min-height: 125px; }
+.ranking-podium .podium-user b { top: -36px; width: 100%; font-size: 16px; }
+.ranking-podium .podium-user span { top: -18px; font-size: 14px; }
+.ranking-list { gap: 6px; margin-top: 10px; }
+.ranking-list div { min-height: 44px; padding: 0 14px; font-size: 14px; }
+.ranking-list b,
+.ranking-list strong { font-size: 14px; }
+
+@media (min-width: 900px) {
+  .ranking-screen .ranking-page { padding: 0; }
+  .ranking-podium { width: min(100%, 720px); min-height: 170px; margin: 20px auto 16px; gap: 14px; }
+  .ranking-podium .podium-user,
+  .ranking-podium .podium-user.first,
+  .ranking-podium .podium-user.second,
+  .ranking-podium .podium-user.third { flex: 1 1 0; min-height: 145px; }
+  .ranking-podium .podium-user.first { min-height: 170px; }
+  .ranking-podium .podium-user.second { min-height: 145px; }
+  .ranking-podium .podium-user.third { min-height: 125px; }
+  .ranking-podium .podium-user b { top: -36px; font-size: 16px; }
+  .ranking-podium .podium-user span { top: -18px; font-size: 14px; }
+  .ranking-list { max-width: 900px; gap: 5px; margin-top: 8px; }
+  .ranking-list div { min-height: 40px; }
+}
+
+@media (max-width: 899px) {
+  .ranking-screen .ranking-page { padding-top: 12px; }
+  .ranking-podium { margin-top: 38px; margin-bottom: 20px; }
+  .ranking-list div { min-height: 44px; }
+}
+
 @media (min-width: 900px) {
   .habit-card .habit-actions .habit-streak-button { flex-direction: column; gap: 3px; }
 }
@@ -3304,3 +3394,49 @@ input:focus {
 }
 
 .habit-card .habit-actions .habit-streak-button { flex-direction: column; gap: 3px; }
+
+/* Final ranking density overrides */
+.modal-backdrop { z-index: 50; }
+.ranking-screen .ranking-page { padding: 16px 4px; overflow: visible; }
+.ranking-podium { margin: 30px auto 18px; min-height: 170px; gap: 14px; }
+.ranking-podium .podium-user,
+.ranking-podium .podium-user.first,
+.ranking-podium .podium-user.second,
+.ranking-podium .podium-user.third {
+  flex: 1 1 0; min-height: 145px; border-radius: 14px 14px 10px 10px; padding: 10px;
+}
+.ranking-podium .podium-user.first { min-height: 170px; }
+.ranking-podium .podium-user.second { min-height: 145px; }
+.ranking-podium .podium-user.third { min-height: 125px; }
+.ranking-podium .podium-user b { top: -36px; width: 100%; font-size: 16px; }
+.ranking-podium .podium-user span { top: -18px; font-size: 14px; }
+.ranking-list { gap: 6px; margin-top: 10px; }
+.ranking-list div { min-height: 44px; padding: 0 14px; font-size: 14px; }
+.ranking-list b, .ranking-list strong { font-size: 14px; }
+@media (min-width: 900px) {
+  .ranking-screen .ranking-page { padding: 0; }
+  .ranking-podium { width: min(100%, 720px); min-height: 170px; margin: 20px auto 16px; gap: 14px; }
+  .ranking-podium .podium-user,
+  .ranking-podium .podium-user.first,
+  .ranking-podium .podium-user.second,
+  .ranking-podium .podium-user.third { flex: 1 1 0; min-height: 145px; }
+  .ranking-podium .podium-user.first { min-height: 170px; }
+  .ranking-podium .podium-user.second { min-height: 145px; }
+  .ranking-podium .podium-user.third { min-height: 125px; }
+  .ranking-podium .podium-user b { top: -36px; font-size: 16px; }
+  .ranking-podium .podium-user span { top: -18px; font-size: 14px; }
+  .ranking-list { max-width: 900px; gap: 5px; margin-top: 8px; }
+  .ranking-list div { min-height: 40px; }
+}
+@media (max-width: 899px) {
+  .ranking-screen .ranking-page { padding-top: 12px; }
+  .ranking-podium { min-height: 100px; margin-top: 38px; margin-bottom: 20px; gap: 8px; }
+  .ranking-podium .podium-user,
+  .ranking-podium .podium-user.first,
+  .ranking-podium .podium-user.second,
+  .ranking-podium .podium-user.third { min-height: 76px; }
+  .ranking-podium .podium-user.first { min-height: 100px; }
+  .ranking-podium .podium-user.second { min-height: 88px; }
+  .ranking-podium .podium-user.third { min-height: 76px; }
+  .ranking-list div { min-height: 44px; }
+}

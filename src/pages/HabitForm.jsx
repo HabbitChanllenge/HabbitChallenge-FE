@@ -83,6 +83,7 @@ export default function HabitForm({
           ? Number(verificationCount || customCount)
           : selectedDays.length,
       verificationDays: frequency === "일주일" ? selectedDays : [],
+      completedCount: habit?.completedCount ?? habit?.checks?.length ?? 0,
       completed: habit?.completed ?? false,
     });
   };
