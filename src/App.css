@@ -3789,8 +3789,8 @@ input:focus {
   inset: auto;
   top: 50%;
   left: 50%;
-  width: 48px;
-  height: 62px;
+  width: 68px;
+  height: 88px;
   object-fit: contain;
   transform: translate(-50%, -50%);
 }
@@ -3801,8 +3801,8 @@ input:focus {
 @media (max-width: 899px) {
   .home-podium-user .trophy-icon,
   .ranking-podium .podium-user.first .trophy-icon {
-    width: 42px;
-    height: 54px;
+    width: 58px;
+    height: 75px;
   }
 }
 @media (min-width: 900px) and (hover: hover) {
@@ -3810,11 +3810,17 @@ input:focus {
   .bottom-nav svg { flex: 0 0 28px; transition: none; }
 }
 .bottom-nav .habit-icon {
-  flex: 0 0 28px;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
   opacity: 0.65;
   transition: none;
 }
 .bottom-nav .active .habit-icon { opacity: 1; }
 @media (max-width: 899px) {
-  .bottom-nav .habit-icon { flex-basis: 26px; }
+  .bottom-nav .habit-icon {
+    width: 32px;
+    height: 32px;
+    flex-basis: 32px;
+  }
 }
