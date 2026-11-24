@@ -3828,8 +3828,11 @@ input:focus {
 }
 
 /* Put names and streaks on their podiums instead of above or beside them. */
+.home-ranking-podium {
+  grid-template-columns: 1fr 1.1fr 1fr;
+}
 .home-podium-user b {
-  top: 10px;
+  top: -52px;
   left: 50%;
   z-index: 2;
   width: calc(100% - 12px);
@@ -3839,7 +3842,7 @@ input:focus {
   text-overflow: ellipsis;
 }
 .home-podium-user span {
-  top: 34px;
+  top: -29px;
   left: 50%;
   z-index: 2;
   transform: translateX(-50%);
@@ -3847,9 +3850,10 @@ input:focus {
 }
 .home-podium-user .trophy-icon,
 .ranking-podium .podium-user.first .trophy-icon { z-index: 0; }
-.home-skeleton-label {
+.home-skeleton-name,
+.home-skeleton-days {
   position: absolute;
-  top: 12px;
+  top: -50px;
   left: 50%;
   z-index: 2;
   width: 66%;
@@ -3857,6 +3861,18 @@ input:focus {
   transform: translateX(-50%);
   border-radius: 8px;
   background: #dedede;
+}
+.home-skeleton-days {
+  top: -28px;
+  width: 28%;
+  height: 10px;
+}
+.bottom-nav .habit-icon { margin-inline: 0; }
+.ranking-screen .ranking-podium { margin-top: 68px; }
+.ranking-screen .ranking-podium .podium-user b { top: -46px; }
+.ranking-screen .ranking-podium .podium-user span { top: -23px; }
+@media (max-width: 899px) {
+  .ranking-screen .ranking-podium { margin-top: 60px; }
 }
 .home-ranking-podium,
 .home-skeleton-ranking .home-ranking-podium {

@@ -29,14 +29,17 @@ function SkeletonRanking() {
     <div className="home-skeleton-ranking" aria-hidden="true">
       <div className="home-ranking-podium">
         <div className="home-podium-user second">
-          <i className="home-skeleton-label" />
+          <i className="home-skeleton-name" />
+          <i className="home-skeleton-days" />
         </div>
         <div className="home-podium-user first">
-          <i className="home-skeleton-label" />
+          <i className="home-skeleton-name" />
+          <i className="home-skeleton-days" />
           <img className="trophy-icon" src={firstPlaceTrophy} alt="" />
         </div>
         <div className="home-podium-user third">
-          <i className="home-skeleton-label" />
+          <i className="home-skeleton-name" />
+          <i className="home-skeleton-days" />
         </div>
       </div>
     </div>
