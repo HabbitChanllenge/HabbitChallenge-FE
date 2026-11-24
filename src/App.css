@@ -3786,13 +3786,11 @@ input:focus {
 /* Keep the first place art inside its podium tile and add air above the name. */
 .home-podium-user .trophy-icon,
 .ranking-podium .podium-user.first .trophy-icon {
-  inset: auto;
-  top: 50%;
-  left: 50%;
-  width: 108px;
-  height: 138px;
+  inset: 6px;
+  width: calc(100% - 12px);
+  height: calc(100% - 12px);
   object-fit: contain;
-  transform: translate(-50%, -50%);
+  transform: none;
 }
 .home-podium-user b,
 .ranking-podium .podium-user b { top: -52px; }
@@ -3801,8 +3799,9 @@ input:focus {
 @media (max-width: 899px) {
   .home-podium-user .trophy-icon,
   .ranking-podium .podium-user.first .trophy-icon {
-    width: 92px;
-    height: 118px;
+    inset: 5px;
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
   }
 }
 @media (min-width: 900px) and (hover: hover) {
