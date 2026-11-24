@@ -27,17 +27,17 @@ function SkeletonHabits() {
 function SkeletonRanking() {
   return (
     <div className="home-skeleton-ranking" aria-hidden="true">
-      <div className="home-skeleton-rank-labels">
-        <i />
-        <i />
-        <i />
-      </div>
       <div className="home-ranking-podium">
-        <div className="home-podium-user second" />
+        <div className="home-podium-user second">
+          <i className="home-skeleton-label" />
+        </div>
         <div className="home-podium-user first">
+          <i className="home-skeleton-label" />
           <img className="trophy-icon" src={firstPlaceTrophy} alt="" />
         </div>
-        <div className="home-podium-user third" />
+        <div className="home-podium-user third">
+          <i className="home-skeleton-label" />
+        </div>
       </div>
     </div>
   );

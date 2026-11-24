@@ -3816,10 +3816,55 @@ input:focus {
   transition: none;
 }
 .bottom-nav .active .habit-icon { opacity: 1; }
+@media (min-width: 900px) {
+  .bottom-nav .habit-icon { margin-inline: -11px; }
+}
 @media (max-width: 899px) {
   .bottom-nav .habit-icon {
     width: 40px;
     height: 40px;
     flex-basis: 40px;
+  }
+}
+
+/* Put names and streaks on their podiums instead of above or beside them. */
+.home-podium-user b {
+  top: 10px;
+  left: 50%;
+  z-index: 2;
+  width: calc(100% - 12px);
+  transform: translateX(-50%);
+  overflow: hidden;
+  color: #24310d;
+  text-overflow: ellipsis;
+}
+.home-podium-user span {
+  top: 34px;
+  left: 50%;
+  z-index: 2;
+  transform: translateX(-50%);
+  color: #496e00;
+}
+.home-podium-user .trophy-icon,
+.ranking-podium .podium-user.first .trophy-icon { z-index: 0; }
+.home-skeleton-label {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  z-index: 2;
+  width: 66%;
+  height: 13px;
+  transform: translateX(-50%);
+  border-radius: 8px;
+  background: #dedede;
+}
+.home-ranking-podium,
+.home-skeleton-ranking .home-ranking-podium {
+  margin-top: 68px;
+}
+@media (max-width: 899px) {
+  .home-ranking-podium,
+  .home-skeleton-ranking .home-ranking-podium {
+    margin-top: 58px;
   }
 }
