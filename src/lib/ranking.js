@@ -69,7 +69,9 @@ export function normalizeRanking(value) {
         row?.memberName,
         row?.member_name,
         row?.email,
-      ].filter((value) => value != null).map((value) => String(value).trim().toLowerCase()),
+      ]
+        .filter((value) => value != null)
+        .map((value) => String(value).trim().toLowerCase()),
       id:
         row?.id ??
         row?.userId ??

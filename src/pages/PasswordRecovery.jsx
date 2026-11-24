@@ -163,7 +163,7 @@ export default function PasswordRecovery({ onBack, onComplete }) {
         type="submit"
         disabled={loading || !canReset}
       >
-        {loading ? "\uCC98\uB9AC \uC911\u2026" : "\uCC3E\uAE30"}
+        {loading ? "\uCC98\uB9AC \uC911\u2026" : "\uBE44\uBC00\uBC88\uD638 \uBCC0\uACBD\uD558\uAE30"}
       </button>
     </form>
   );

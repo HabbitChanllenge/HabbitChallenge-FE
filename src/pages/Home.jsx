@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import logo from "../assets/logo.svg";
-import firstPlaceTrophy from "../assets/ranking.svg";
+import firstPlaceTrophy from "../assets/ranking-trophy.svg";
 import BottomNav from "../components/BottomNav.jsx";
 import HabitCard from "../components/HabitCard.jsx";
 import { useRanking } from "../lib/ranking.js";
@@ -78,7 +78,8 @@ export default function Home({
   );
   const dailyCompleted = habits.reduce(
     (total, habit) =>
-      total + Math.min(
+      total +
+      Math.min(
         Math.max(0, Number(habit.completedCount ?? habit.checks?.length ?? 0)),
         Math.max(0, Number(habit.verificationCount ?? 0)),
       ),
@@ -91,14 +92,24 @@ export default function Home({
     <div className="home-page">
       <header className="home-header">
         <span />
-        <img src={logo} alt="새싹루틴 홈" role="button" tabIndex={0} onClick={() => onNavigate("home")} onKeyDown={(event) => event.key === "Enter" && onNavigate("home")} />
+        <img
+          src={logo}
+          alt="새싹루틴 홈"
+          role="button"
+          tabIndex={0}
+          onClick={() => onNavigate("home")}
+          onKeyDown={(event) => event.key === "Enter" && onNavigate("home")}
+        />
         <div className="streak-badge">
           <b>{streak}일</b>
         </div>
       </header>
       <div className="workspace-heading">
         <h1>홈</h1>
-        <div className="streak-badge"><b>{streak}일</b><small>연속 일수</small></div>
+        <div className="streak-badge">
+          <b>{streak}일</b>
+          <small>연속 일수</small>
+        </div>
       </div>
       <section className="home-progress-card" aria-label="오늘의 습관 달성">
         <strong>오늘의 습관 달성</strong>
@@ -111,7 +122,9 @@ export default function Home({
         >
           <i style={{ width: `${dailyProgress}%` }} />
         </div>
-        <b>{dailyCompleted}/{dailyTarget}</b>
+        <b>
+          {dailyCompleted}/{dailyTarget}
+        </b>
       </section>
       <section className="habit-section">
         <div className="section-heading">

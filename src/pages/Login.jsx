@@ -86,7 +86,9 @@ export default function Login({ onSignup, onLogin, onForgotPassword }) {
         </label>
         <label className="field">
           <span>비밀번호</span>
-          <div className={`input-wrap login-password-input ${passwordError || credentialsRejected ? "has-error" : ""}`}>
+          <div
+            className={`input-wrap login-password-input ${passwordError || credentialsRejected ? "has-error" : ""}`}
+          >
             <input
               type={showPassword ? "text" : "password"}
               value={password}
@@ -95,10 +97,21 @@ export default function Login({ onSignup, onLogin, onForgotPassword }) {
                 setCredentialsRejected(false);
                 setRequestError("");
               }}
-              placeholder={"\uBE44\uBC00\uBC88\uD638\uB97C \uC785\uB825\uD574 \uC8FC\uC138\uC694"}
+              placeholder={
+                "\uBE44\uBC00\uBC88\uD638\uB97C \uC785\uB825\uD574 \uC8FC\uC138\uC694"
+              }
               autoComplete="current-password"
             />
-            <button type="button" className="visibility-button" onClick={() => setShowPassword((value) => !value)} aria-label={showPassword ? "\uBE44\uBC00\uBC88\uD638 \uC228\uAE30\uAE30" : "\uBE44\uBC00\uBC88\uD638 \uD45C\uC2DC"}>
+            <button
+              type="button"
+              className="visibility-button"
+              onClick={() => setShowPassword((value) => !value)}
+              aria-label={
+                showPassword
+                  ? "\uBE44\uBC00\uBC88\uD638 \uC228\uAE30\uAE30"
+                  : "\uBE44\uBC00\uBC88\uD638 \uD45C\uC2DC"
+              }
+            >
               <PasswordVisibilityIcon visible={showPassword} />
             </button>
           </div>

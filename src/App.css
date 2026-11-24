@@ -3782,3 +3782,39 @@ input:focus {
   .home-empty-state button,
   .habit-empty button { min-height: 46px; height: 46px; font-size: 16px; }
 }
+
+/* Keep the first place art inside its podium tile and add air above the name. */
+.home-podium-user .trophy-icon,
+.ranking-podium .podium-user.first .trophy-icon {
+  inset: auto;
+  top: 50%;
+  left: 50%;
+  width: 48px;
+  height: 62px;
+  object-fit: contain;
+  transform: translate(-50%, -50%);
+}
+.home-podium-user b,
+.ranking-podium .podium-user b { top: -52px; }
+.home-podium-user span,
+.ranking-podium .podium-user span { top: -29px; }
+@media (max-width: 899px) {
+  .home-podium-user .trophy-icon,
+  .ranking-podium .podium-user.first .trophy-icon {
+    width: 42px;
+    height: 54px;
+  }
+}
+@media (min-width: 900px) and (hover: hover) {
+  .bottom-nav button:hover { transform: none; }
+  .bottom-nav svg { flex: 0 0 28px; transition: none; }
+}
+.bottom-nav .habit-icon {
+  flex: 0 0 28px;
+  opacity: 0.65;
+  transition: none;
+}
+.bottom-nav .active .habit-icon { opacity: 1; }
+@media (max-width: 899px) {
+  .bottom-nav .habit-icon { flex-basis: 26px; }
+}

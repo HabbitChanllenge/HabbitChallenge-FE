@@ -1,14 +1,9 @@
+import habitIcon from "../assets/iconhabit.svg";
 const icons = {
   home: (
     <>
       <path d="M3 10.5 12 3l9 7.5" />
       <path d="M5.5 9.5V21h13V9.5M9 21v-7h6v7" />
-    </>
-  ),
-  habit: (
-    <>
-      <path d="M20.5 3.5c-8-1.8-15.7.7-15.7 7.3 0 5.2 5.5 7.5 10.1 5.2 4.1-2 6.1-7.1 5.6-12.5Z" />
-      <path d="M3 4c1.8 6.8 5.7 11.4 12.2 14.2L20 21" />
     </>
   ),
   ranking: (
@@ -46,9 +41,13 @@ export default function BottomNav({ active, onNavigate }) {
           aria-current={active === id ? "page" : undefined}
           onClick={() => onNavigate(id)}
         >
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            {icons[id]}
-          </svg>
+          {id === "habit" ? (
+            <img className="nav-icon-image habit-icon" src={habitIcon} alt="" />
+          ) : (
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              {icons[id]}
+            </svg>
+          )}
           <small>{label}</small>
         </button>
       ))}

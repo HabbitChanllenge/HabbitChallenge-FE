@@ -31,7 +31,14 @@ export default function Habit({
     <div className="sub-page">
       <header className="home-header">
         <span />
-        <img src={logo} alt="새싹루틴 홈" role="button" tabIndex={0} onClick={() => onNavigate("home")} onKeyDown={(event) => event.key === "Enter" && onNavigate("home")} />
+        <img
+          src={logo}
+          alt="새싹루틴 홈"
+          role="button"
+          tabIndex={0}
+          onClick={() => onNavigate("home")}
+          onKeyDown={(event) => event.key === "Enter" && onNavigate("home")}
+        />
         <div className="streak-badge">
           <b>{streak}일</b>
         </div>
@@ -39,9 +46,19 @@ export default function Habit({
       <div className="workspace-heading">
         <div className="workspace-title-group">
           <h1>내 습관</h1>
-          <button className="workspace-action" type="button" onClick={() => onNavigate("habit-create")} aria-label="습관 추가">+</button>
+          <button
+            className="workspace-action"
+            type="button"
+            onClick={() => onNavigate("habit-create")}
+            aria-label="습관 추가"
+          >
+            +
+          </button>
         </div>
-        <div className="streak-badge"><b>{streak}일</b><small>연속 일수</small></div>
+        <div className="streak-badge">
+          <b>{streak}일</b>
+          <small>연속 일수</small>
+        </div>
       </div>
       <main className="habit-page-content">
         <div className="habit-title">
