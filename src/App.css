@@ -3888,3 +3888,20 @@ input:focus {
     margin-top: 58px;
   }
 }
+@media (min-width: 900px) {
+  .bottom-nav > button:not(.nav-brand) {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    align-items: center;
+    justify-content: initial;
+    justify-items: initial;
+    column-gap: 14px;
+  }
+  .bottom-nav > button:not(.nav-brand) svg,
+  .bottom-nav > button:not(.nav-brand) .nav-icon-image {
+    justify-self: center;
+    margin: 0;
+  }
+  .bottom-nav > button:not(.nav-brand) small { justify-self: start; }
+  .bottom-nav > .nav-habit .habit-icon { transform: translateX(2px); }
+}
