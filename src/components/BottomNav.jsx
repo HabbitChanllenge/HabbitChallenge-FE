@@ -35,7 +35,7 @@ export default function BottomNav({ active, onNavigate }) {
       </button>
       {items.map(([id, label]) => (
         <button
-          className={active === id ? "active" : ""}
+          className={`${active === id ? "active" : ""} nav-${id}`}
           type="button"
           key={id}
           aria-current={active === id ? "page" : undefined}

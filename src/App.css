@@ -3816,8 +3816,13 @@ input:focus {
   transition: none;
 }
 .bottom-nav .active .habit-icon { opacity: 1; }
+.bottom-nav .nav-ranking svg {
+  width: 32px;
+  height: 32px;
+}
 @media (min-width: 900px) {
   .bottom-nav .habit-icon { margin-inline: -11px; }
+  .bottom-nav .nav-ranking svg { flex-basis: 32px; }
 }
 @media (max-width: 899px) {
   .bottom-nav .habit-icon {
