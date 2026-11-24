@@ -229,6 +229,16 @@ input:focus {
   padding: 13px;
   font-size: 15px;
 }
+.primary-button.recovery-submit:not(.is-ready),
+.primary-button.recovery-submit:not(.is-ready):hover {
+  background: #d7f370;
+  cursor: not-allowed;
+}
+.primary-button.recovery-submit.is-ready,
+.primary-button.recovery-submit.is-ready:hover {
+  background: #95cd1a;
+  cursor: pointer;
+}
 .password-change-form {
   display: flex;
   flex: 1;
@@ -1753,6 +1763,177 @@ input:focus {
   align-items: end;
   gap: 5px;
   padding: 26px 18px 0;
+}
+
+/* Keep the home preview and full ranking podium on the same scale. */
+.home-ranking-podium,
+.ranking-podium {
+  box-sizing: border-box;
+  width: min(100%, 580px);
+  min-height: 170px;
+  margin: 44px auto 22px;
+  gap: 14px;
+}
+.home-podium-user,
+.ranking-podium .podium-user,
+.ranking-podium .podium-user.first,
+.ranking-podium .podium-user.second,
+.ranking-podium .podium-user.third {
+  box-sizing: border-box;
+  min-height: 145px;
+}
+.home-podium-user.first,
+.ranking-podium .podium-user.first {
+  min-height: 170px;
+}
+.home-podium-user.second,
+.ranking-podium .podium-user.second {
+  min-height: 145px;
+}
+.home-podium-user.third,
+.ranking-podium .podium-user.third {
+  min-height: 110px;
+}
+.home-podium-user .trophy-icon,
+.ranking-podium .podium-user.first .trophy-icon {
+  transform: scale(1.12);
+}
+.home-empty-state button,
+.habit-empty button {
+  min-height: 42px;
+  height: 42px;
+  font-size: 15px;
+}
+
+@media (max-width: 899px) {
+  .home-ranking-podium,
+  .ranking-podium {
+    width: min(100%, 560px);
+    min-height: 140px;
+    margin: 38px auto 20px;
+    gap: 8px;
+  }
+  .home-podium-user,
+  .ranking-podium .podium-user,
+  .ranking-podium .podium-user.first,
+  .ranking-podium .podium-user.second,
+  .ranking-podium .podium-user.third {
+    min-height: 120px;
+  }
+  .home-podium-user.first,
+  .ranking-podium .podium-user.first {
+    min-height: 145px;
+  }
+  .home-podium-user.second,
+  .ranking-podium .podium-user.second {
+    min-height: 120px;
+  }
+  .home-podium-user.third,
+  .ranking-podium .podium-user.third {
+    min-height: 100px;
+  }
+  .home-empty-state button,
+  .habit-empty button {
+    min-height: 46px;
+    height: 46px;
+    font-size: 16px;
+  }
+}
+
+/* Final shared sizing after responsive ranking overrides. */
+.home-ranking-podium,
+.ranking-podium {
+  box-sizing: border-box;
+  width: min(100%, 580px);
+  min-height: 170px;
+  margin: 44px auto 22px;
+  gap: 14px;
+}
+.home-podium-user,
+.ranking-podium .podium-user,
+.ranking-podium .podium-user.first,
+.ranking-podium .podium-user.second,
+.ranking-podium .podium-user.third { box-sizing: border-box; min-height: 145px; }
+.home-podium-user.first,
+.ranking-podium .podium-user.first { min-height: 170px; }
+.home-podium-user.second,
+.ranking-podium .podium-user.second { min-height: 145px; }
+.home-podium-user.third,
+.ranking-podium .podium-user.third { min-height: 110px; }
+.home-podium-user .trophy-icon,
+.ranking-podium .podium-user.first .trophy-icon { transform: scale(1.12); }
+.home-empty-state button,
+.habit-empty button { min-height: 42px; height: 42px; font-size: 15px; }
+.home-empty-state { grid-template-rows: auto 42px; }
+@media (max-width: 899px) {
+  .home-ranking-podium,
+  .ranking-podium { width: min(100%, 560px); min-height: 140px; margin: 38px auto 20px; gap: 8px; }
+  .home-podium-user,
+  .ranking-podium .podium-user,
+  .ranking-podium .podium-user.first,
+  .ranking-podium .podium-user.second,
+  .ranking-podium .podium-user.third { min-height: 120px; }
+  .home-podium-user.first,
+  .ranking-podium .podium-user.first { min-height: 145px; }
+  .home-podium-user.second,
+  .ranking-podium .podium-user.second { min-height: 120px; }
+  .home-podium-user.third,
+  .ranking-podium .podium-user.third { min-height: 100px; }
+  .home-empty-state button,
+  .habit-empty button { min-height: 46px; height: 46px; font-size: 16px; }
+  .home-empty-state { grid-template-rows: auto 46px; }
+}
+
+/* Keep password input and visibility control inside one clean field. */
+.input-wrap {
+  box-sizing: border-box;
+  min-height: 48px;
+  align-items: stretch;
+  border: 2px solid #95cd1a;
+  border-radius: 10px;
+  outline: 0;
+  background: #f8fceb;
+}
+.input-wrap:focus-within {
+  border-color: #83b90a;
+  outline: 0;
+  box-shadow: 0 0 0 2px rgb(149 205 26 / 18%);
+}
+.input-wrap.has-error {
+  border-color: #ff7474;
+  outline: 0 !important;
+  box-shadow: 0 0 0 2px rgb(255 116 116 / 14%);
+}
+.input-wrap input,
+.input-wrap input:focus {
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 0;
+  outline: 0 !important;
+  background: transparent;
+  box-shadow: none;
+  font-size: 15px;
+  line-height: 1.4;
+}
+.input-wrap .visibility-button {
+  box-sizing: border-box;
+  flex: 0 0 48px;
+  width: 48px;
+  min-height: 44px;
+  height: auto;
+  border: 0;
+  border-left: 1px solid rgb(149 205 26 / 35%);
+  border-radius: 0;
+  outline: 0;
+  box-shadow: none;
+}
+.input-wrap .visibility-button:focus,
+.input-wrap .visibility-button:focus-visible {
+  outline: 0;
+  box-shadow: none;
 }
 .podium-user {
   position: relative;
@@ -3457,4 +3638,147 @@ input:focus {
     width: min(100%, 560px);
     margin-top: 52px;
   }
+}
+
+/* Auth fields share the login email field's dimensions and focus treatment. */
+.auth-form .field,
+.password-change-form .password-change-field {
+  gap: 7px;
+  font-size: 15px;
+}
+.auth-form .field > input,
+.password-change-field .password-change-input {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  border: 1px solid #dedede;
+  border-radius: 8px;
+  background: #f0f0f0;
+  color: #282828;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+.auth-form .field > input {
+  padding: 12px 14px;
+  outline: 0;
+}
+.auth-form .field > input:focus {
+  border-color: #95cd1a;
+  outline: 0;
+  background: #f8fceb;
+  box-shadow: 0 0 0 2px rgb(149 205 26 / 18%);
+}
+.auth-form .field > input.has-error {
+  border-color: #ff7474;
+  outline: 0 !important;
+  box-shadow: 0 0 0 2px rgb(255 116 116 / 14%);
+}
+.auth-form .field > .input-wrap,
+.password-change-field .password-change-input {
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  border: 1px solid #dedede;
+  border-radius: 8px;
+  outline: 0;
+  background: #f0f0f0;
+  box-shadow: none;
+}
+.auth-form .field > .input-wrap:focus-within,
+.password-change-field .password-change-input:focus-within {
+  border-color: #95cd1a;
+  outline: 0;
+  background: #f8fceb;
+  box-shadow: 0 0 0 2px rgb(149 205 26 / 18%);
+}
+.auth-form .field > .input-wrap.has-error,
+.password-change-field .password-change-input.has-error {
+  border-color: #ff7474;
+  outline: 0 !important;
+  box-shadow: 0 0 0 2px rgb(255 116 116 / 14%);
+}
+.auth-form .field > .input-wrap input,
+.password-change-field .password-change-input input,
+.auth-form .field > .input-wrap input:focus,
+.password-change-field .password-change-input input:focus {
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
+  min-height: 46px;
+  padding: 12px 14px;
+  border: 0;
+  border-radius: 0;
+  outline: 0 !important;
+  background: transparent;
+  box-shadow: none;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+.auth-form .visibility-button,
+.password-change-field .password-eye {
+  box-sizing: border-box;
+  flex: 0 0 46px;
+  width: 46px;
+  min-height: 46px;
+  height: auto;
+  border: 0;
+  border-left: 1px solid #dedede;
+  border-radius: 0;
+  outline: 0;
+  box-shadow: none;
+}
+.auth-form .visibility-button:focus,
+.auth-form .visibility-button:focus-visible,
+.password-change-field .password-eye:focus,
+.password-change-field .password-eye:focus-visible {
+  outline: 0;
+  box-shadow: none;
+}
+.password-change-form { padding-inline: 32px; }
+
+/* Final shared sizing after responsive ranking overrides. */
+.home-ranking-podium,
+.ranking-podium {
+  box-sizing: border-box;
+  width: min(100%, 580px);
+  min-height: 170px;
+  margin: 44px auto 22px;
+  gap: 14px;
+}
+.home-podium-user,
+.ranking-podium .podium-user,
+.ranking-podium .podium-user.first,
+.ranking-podium .podium-user.second,
+.ranking-podium .podium-user.third { box-sizing: border-box; min-height: 145px; }
+.home-podium-user.first,
+.ranking-podium .podium-user.first { min-height: 170px; }
+.home-podium-user.second,
+.ranking-podium .podium-user.second { min-height: 145px; }
+.home-podium-user.third,
+.ranking-podium .podium-user.third { min-height: 110px; }
+.home-podium-user .trophy-icon,
+.ranking-podium .podium-user.first .trophy-icon { transform: scale(1.12); }
+.home-empty-state button,
+.habit-empty button { min-height: 42px; height: 42px; font-size: 15px; }
+@media (max-width: 899px) {
+  .home-ranking-podium,
+  .ranking-podium { width: min(100%, 560px); min-height: 140px; margin: 38px auto 20px; gap: 8px; }
+  .home-podium-user,
+  .ranking-podium .podium-user,
+  .ranking-podium .podium-user.first,
+  .ranking-podium .podium-user.second,
+  .ranking-podium .podium-user.third { min-height: 120px; }
+  .home-podium-user.first,
+  .ranking-podium .podium-user.first { min-height: 145px; }
+  .home-podium-user.second,
+  .ranking-podium .podium-user.second { min-height: 120px; }
+  .home-podium-user.third,
+  .ranking-podium .podium-user.third { min-height: 100px; }
+  .home-empty-state button,
+  .habit-empty button { min-height: 46px; height: 46px; font-size: 16px; }
 }

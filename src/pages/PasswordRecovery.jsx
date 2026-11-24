@@ -28,6 +28,8 @@ export default function PasswordRecovery({ onBack, onComplete }) {
     attempted && passwordPattern.test(password) && password !== confirm
       ? "비밀번호가 일치하지 않습니다."
       : "";
+  const canReset =
+    verified && passwordPattern.test(password) && password === confirm;
   const requestCode = async () => {
     if (!emailPattern.test(email)) return;
     setLoading(true);
@@ -157,11 +159,11 @@ export default function PasswordRecovery({ onBack, onComplete }) {
         </p>
       )}
       <button
-        className="primary-button recovery-submit"
+        className={`primary-button recovery-submit ${canReset ? "is-ready" : ""}`}
         type="submit"
-        disabled={loading}
+        disabled={loading || !canReset}
       >
-        {loading ? "처리 중…" : "비밀번호 변경하기"}
+        {loading ? "\uCC98\uB9AC \uC911\u2026" : "\uCC3E\uAE30"}
       </button>
     </form>
   );

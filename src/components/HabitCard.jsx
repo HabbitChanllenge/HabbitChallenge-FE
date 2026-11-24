@@ -42,7 +42,10 @@ export default function HabitCard({ habit, onEdit, onToggleCheck }) {
         </button>
         <div className="habit-streak-button">
           <span>연속 성공</span>
-          <strong>{displayedStreak}{habit.frequency === "일주일" ? "주" : "일"}</strong>
+          <strong>
+            {displayedStreak}
+            {habit.frequency === "일주일" ? "주" : "일"}
+          </strong>
         </div>
       </div>
       {showChecks && (
